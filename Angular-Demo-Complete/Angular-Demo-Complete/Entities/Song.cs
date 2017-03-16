@@ -16,11 +16,28 @@ namespace Angular_Demo_Complete.Entities
 
         public String title { get; set; }
 
-        public double price { get; set; }
+        public double storedPrice { get; set; } = 1.29;
 
-        public bool onSale { get; set; }
+        [NotMapped]
+        public double price
+        {
+            get
+            {
+                return calculatePrice();
+            }
+            set
+            {
+                this.price = value;
+            }
+        }
 
-        public double discount { get; set; }
+        
+
+        public bool onSale { get; set; } = false;
+
+
+        [Range(0.0,1.0)]
+        public double discount { get; set; } = 0.0;
 
         [NotMapped]
         public String formatPrice {
@@ -31,11 +48,38 @@ namespace Angular_Demo_Complete.Entities
                 this.formatPrice = value;
             }
         }
-        
+
+        private double calculatePrice()
+        {
+            if (storedPrice == 0)
+            {
+                return 0;
+            }
+            else if (onSale == false)
+            {
+                return storedPrice;
+            }
+            else if (onSale)
+            {
+                if (discount != 0.0)
+                {
+                    var price = (storedPrice - (discount * storedPrice));
+                    return Math.Round(price, 2);
+                }
+            }
+
+
+            throw new Exception("Should never hit me!");
+        }
 
         private string toFormat()
         {
-            return "";
+            var p = price;
+            if (p == 0) {
+                return "FREE!";
+            }
+            else
+                return String.Format("{0:$##,###,###,##0.00}", p);
         }
     }
 }

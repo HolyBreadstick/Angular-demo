@@ -13,6 +13,12 @@ namespace Angular_Demo_Complete.Controllers
     [RoutePrefix("api/Information")]
     public class InformationController : ApiController
     {
+        private MusicContext db;
+
+        public InformationController() {
+            db = new MusicContext();
+        }
+
         [Route("Time")]
         public object GetTime() {
             return DateTime.Now;
@@ -21,30 +27,9 @@ namespace Angular_Demo_Complete.Controllers
         [Route("Demo")]
         public object GetDemo() {
 
-            var temp = new Artist() {
-                firstName = "Bailey",
-                lastName = "Miller",
-                birthdate= new DateTime(1996,11,06)
-            };
+            var AllArtist = db.Artist.ToList();
 
-            var tempAl = new Album() {
-                title = "Hot Rap Shit",
-                views = 0
-            };
-
-            var tempS = new Song() {
-                title="Burnout",
-                onSale=true,
-                discount=.25,
-                price = 1.99
-            };
-
-            tempAl.Songs.Add(tempS);
-
-            temp.Albums.Add(tempAl);
-
-
-            return temp;
+            return AllArtist;
 
         }
 

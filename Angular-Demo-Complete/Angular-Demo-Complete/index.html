@@ -7,12 +7,21 @@
 
     <!-- Need to include all the js files try and keep them as organized as possible -->
 
+    <!-- Meta -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="Content/Main.css" rel="stylesheet" />
+
     <!-- Jquery -->
     <script src="Scripts/jquery-1.9.1.min.js"></script>
 
-    <!-- CSS -->
-    <link href="Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="Content/Main.css" rel="stylesheet" />
+    <!-- Bootstrap -->
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
 
     <!-- Angular Core -->
     <script src="Scripts/angular.min.js"></script>
@@ -26,7 +35,7 @@
     <!-- Filters -->
 
     <!-- Directives  -->
-    <script src="Scriptables/Directives/music-footer.js"></script>
+    <script src="Scriptables/Directives/musicFooter.js"></script>
 
     <!-- Controllers -->
     <script src="Scriptables/Controllers/main_controller.js"></script>
@@ -38,14 +47,32 @@
     <!-- Declaring Main_Controller as the root level controller with a naming syntax for short naming -->
     <!-- Also when working with nested views sometimes it comes in handy to know which controller you're calling -->
 
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Music Store Demo</a>
+            </div>
+            <div id="navbar" class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </nav>
 
-
-    <div data-ng-view data-ng-cloak>
+    <div class="view" data-ng-view data-ng-cloak>
 
     </div>
 
 
-    <music_footer></music_footer>
+    <music-footer></music-footer>
 
 </body>
 </html>

@@ -3,12 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Net;
 using System.Web;
 
 namespace Angular_Demo_Complete.Entities
 {
     public class Album
     {
+
+        public Album() {
+
+        }
+
+        public Album(String url) {
+            downloadImage(url);
+        }
+
         [Key]
         public int ID { get; set; }
 
@@ -23,14 +33,40 @@ namespace Angular_Demo_Complete.Entities
         public byte[] image { get; set; }
 
         [NotMapped]
-        public double price { get; set; }
+        public double price { get {
+                return calculatePrice();
+            } set {
+                this.price = value;
+            } }
 
-        public bool downloadImage() {
-            return false;
+        public bool downloadImage(String url) {
+            var client = new WebClient();
+
+            try
+            {
+                var data = client.DownloadData(url);
+                this.image = data;
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+
         }
 
         public double calculatePrice() {
-            return 0.0;
+            var total = 0.0;
+
+
+            foreach (var s in Songs) {
+                total += s.price;
+            }
+
+            total = (total*.6);
+
+            return total;
         }
 
     }
