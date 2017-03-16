@@ -18,6 +18,10 @@ namespace Angular_Demo_Complete.Entities
 
         public double price { get; set; }
 
+        public bool onSale { get; set; }
+
+        public double discount { get; set; }
+
         [NotMapped]
         public String formatPrice {
             get {
@@ -27,8 +31,8 @@ namespace Angular_Demo_Complete.Entities
                 this.formatPrice = value;
             }
         }
+        
 
-        [NotMapped]
         private string toFormat()
         {
             return "";
