@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+
+    <!-- Need to include all the js files try and keep them as organized as possible -->
+
+    <!-- Jquery -->
+    <script src="Scripts/jquery-1.9.1.min.js"></script>
+
+    <!-- CSS -->
+    <link href="Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="Content/Main.css" rel="stylesheet" />
+
+    <!-- Angular Core -->
+    <script src="Scripts/angular.min.js"></script>
+    <script src="Scripts/angular-route.min.js"></script>
+
+    <!-- Modules -->
+    <script src="Scriptables/Modules/Routing_Main.js"></script>
+    <script src="Scriptables/Modules/Controllers.js"></script>
+    <!-- Services -->
+
+    <!-- Filters -->
+
+    <!-- Directives  -->
+    <script src="Scriptables/Directives/music-footer.js"></script>
+
+    <!-- Controllers -->
+    <script src="Scriptables/Controllers/main_controller.js"></script>
+    <script src="Scriptables/Controllers/home_controller.js"></script>
+
+</head>
+<body ng-app="Routing_Main" ng-controller="main_controller as $ctrl">
+    <!-- Declaring Routing_Main as our route level application -->
+    <!-- Declaring Main_Controller as the root level controller with a naming syntax for short naming -->
+    <!-- Also when working with nested views sometimes it comes in handy to know which controller you're calling -->
+
+
+
+    <div data-ng-view data-ng-cloak>
+
+    </div>
+
+
+    <music_footer></music_footer>
+
+</body>
+</html>

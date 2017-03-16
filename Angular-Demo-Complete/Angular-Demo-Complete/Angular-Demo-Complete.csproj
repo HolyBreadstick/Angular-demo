@@ -80,10 +80,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Main.css" />
     <Content Include="Content\select.css" />
     <Content Include="Content\select.min.css" />
     <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="Global.asax" />
+    <Content Include="index.html" />
+    <Content Include="Pages\home.html" />
+    <Content Include="Pages\Templates\Directives\Footer\footer.html" />
+    <Content Include="Scriptables\Controllers\home_controller.js" />
+    <Content Include="Scriptables\Controllers\main_controller.js" />
+    <Content Include="Scriptables\Directives\music-footer.js" />
+    <Content Include="Scriptables\Modules\Controllers.js" />
+    <Content Include="Scriptables\Modules\Routing_Main.js" />
     <Content Include="Scripts\angular-cookies.js" />
     <Content Include="Scripts\angular-cookies.min.js" />
     <Content Include="Scripts\angular-mocks.js" />
@@ -99,6 +114,17 @@
     <Content Include="Scripts\angular-ui\ui-utils.min.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\jquery-1.9.1.js" />
+    <Content Include="Scripts\jquery-1.9.1.min.js" />
     <Content Include="Scripts\select.js" />
     <Content Include="Scripts\select.min.js" />
     <Content Include="Web.config" />
@@ -121,6 +147,7 @@
     <Content Include="Scripts\select.min.js.map" />
     <Content Include="Content\select.min.css.map" />
     <Content Include="Scripts\angular-cookies.min.js.map" />
+    <Content Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -131,10 +158,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Models\" />
-    <Folder Include="Scriptables\Controllers\" />
-    <Folder Include="Scriptables\Directives\" />
     <Folder Include="Scriptables\Filters\" />
-    <Folder Include="Scriptables\Modules\" />
     <Folder Include="Scriptables\Services\" />
   </ItemGroup>
   <PropertyGroup>
