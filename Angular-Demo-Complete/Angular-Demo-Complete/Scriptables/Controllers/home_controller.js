@@ -10,9 +10,7 @@
     function home_controller($scope, $http) {
 
         $scope.SearchArtist = function (artist) {
-            return $http({
-
-            });
+            
         };
     }
 })();
