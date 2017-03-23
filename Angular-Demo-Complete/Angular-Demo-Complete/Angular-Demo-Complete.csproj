@@ -103,7 +103,6 @@
     <Content Include="Scriptables\Controllers\home_controller.js" />
     <Content Include="Scriptables\Controllers\main_controller.js" />
     <Content Include="Scriptables\Directives\musicFooter.js" />
-    <Content Include="Scriptables\Directives\ngEnter.js" />
     <Content Include="Scriptables\Modules\Controllers.js" />
     <Content Include="Scriptables\Modules\Routing_Main.js" />
     <Content Include="Scripts\angular-animate.js" />
