@@ -21,7 +21,7 @@
             Errors: {
                 
             },
-            Endpoint: 'https://localhost:44375'
+            Endpoint: 'http://localhost:50569/'
         };
 
 

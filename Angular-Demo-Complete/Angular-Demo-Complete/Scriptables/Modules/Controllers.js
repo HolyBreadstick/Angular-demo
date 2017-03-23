@@ -3,8 +3,10 @@
 
     angular.module('Controllers', [
         // Angular modules 
-        'ngRoute'
+        'ngRoute',
+        'ui.bootstrap',
         // Custom modules
+        'Services'
         // 3rd Party Modules
 
     ]);

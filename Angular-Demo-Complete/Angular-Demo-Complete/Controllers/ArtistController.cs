@@ -58,12 +58,17 @@ namespace Angular_Demo_Complete.Controllers
                 db.Artist.Add(Art);
                 db.SaveChanges();
             }
-            
 
-            return GetAllArtist();
+            return Art;
 
         }
 
+        [Route("Search")]
+        public object SearchArtist(String Artist) {
+            var data = (from search in db.Artist where search.firstName.Contains(Artist) select search.firstName).Take(10).ToList();
+
+            return data;
+        }
 
         private void AddAlbum(Entities.Artist Artist, Models.ArtistSearch.Album[] Albums) {
 
@@ -82,12 +87,16 @@ namespace Angular_Demo_Complete.Controllers
                 var AlbumSearch = JsonConvert.DeserializeObject<AlbumGetInfo>(rawData);
 
 
-                var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text) {
-                    title = AlbumSearch.album.name,
-                    views = int.Parse(AlbumSearch.album.playcount)
-                };
-                AddSongs(workingAlbum, AlbumSearch.album.tracks.track);
-                Artist.Albums.Add(workingAlbum);
+                if (AlbumSearch.album != null)
+                {
+                    var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text)
+                    {
+                        title = AlbumSearch.album.name,
+                        views = int.Parse(AlbumSearch.album.playcount)
+                    };
+                    AddSongs(workingAlbum, AlbumSearch.album.tracks.track);
+                    Artist.Albums.Add(workingAlbum); 
+                }
 
             }
 
