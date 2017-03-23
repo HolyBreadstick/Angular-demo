@@ -24,14 +24,6 @@ namespace Angular_Demo_Complete.Controllers
             return DateTime.Now;
         }
 
-        [Route("Demo")]
-        public object GetDemo() {
-
-            var AllArtist = db.Artist.ToList();
-
-            return AllArtist;
-
-        }
-
+        
     }
 }

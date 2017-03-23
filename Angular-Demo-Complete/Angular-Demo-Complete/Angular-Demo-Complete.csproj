@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\ArtistController.cs" />
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Entities\Album.cs" />
     <Compile Include="Entities\Artist.cs" />
@@ -176,7 +177,13 @@
     <Compile Include="Migrations\201703161953140_Picture-Worker-Fix.Designer.cs">
       <DependentUpon>201703161953140_Picture-Worker-Fix.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201703190139255_Cleanup-Length.cs" />
+    <Compile Include="Migrations\201703190139255_Cleanup-Length.Designer.cs">
+      <DependentUpon>201703190139255_Cleanup-Length.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\AlbumGetInfo.cs" />
+    <Compile Include="Models\ArtistTopAlbums.cs" />
     <Compile Include="MusicContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -197,7 +204,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
     <Folder Include="Scriptables\Filters\" />
     <Folder Include="Scriptables\Services\" />
   </ItemGroup>
@@ -213,6 +219,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201703161953140_Picture-Worker-Fix.resx">
       <DependentUpon>201703161953140_Picture-Worker-Fix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201703190139255_Cleanup-Length.resx">
+      <DependentUpon>201703190139255_Cleanup-Length.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
