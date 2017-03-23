@@ -95,6 +95,8 @@
     <Content Include="Content\select.min.css" />
     <Content Include="Content\ui-bootstrap-csp.css" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Original\AlbumBackground.jpg" />
+    <Content Include="Images\Production\AlbumBackground.min.jpg" />
     <Content Include="index.html" />
     <Content Include="Pages\home.html" />
     <Content Include="Pages\Templates\Directives\Footer\footer.html" />
@@ -182,8 +184,8 @@
       <DependentUpon>201703190139255_Cleanup-Length.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\AlbumGetInfo.cs" />
-    <Compile Include="Models\ArtistTopAlbums.cs" />
+    <Compile Include="Migrations\Models\AlbumGetInfo.cs" />
+    <Compile Include="Migrations\Models\ArtistTopAlbums.cs" />
     <Compile Include="MusicContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -10,7 +10,21 @@
 
 <!-- It will help you early on if you start each template with a global div that wraps everything on that view -->
 <!-- Get in the habit of all views start with the same class, this will ensure they all look similar -->
+<div>
+    <div class="jumbotron view-heading text-center">
+
+    </div>
+</div>
 <div class="view-start">
-    <h1>Hello World! {{title}}</h1>
+    <form id="MusicSearch" class="Search">
+        <span class="glyphicon glyphicon-search"></span>
+        <input type="search" ng-model="MusicSearch" placeholder="Search Artist"/>
+    </form>
+
+
+    <div class="Music-Listing">
+
+    </div>
+
 </div>
 
