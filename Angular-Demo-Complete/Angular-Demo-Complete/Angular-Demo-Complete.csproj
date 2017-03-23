@@ -105,6 +105,8 @@
     <Content Include="Scriptables\Directives\musicFooter.js" />
     <Content Include="Scriptables\Modules\Controllers.js" />
     <Content Include="Scriptables\Modules\Routing_Main.js" />
+    <Content Include="Scriptables\Modules\Services.js" />
+    <Content Include="Scriptables\Services\SessionState.js" />
     <Content Include="Scripts\angular-animate.js" />
     <Content Include="Scripts\angular-animate.min.js" />
     <Content Include="Scripts\angular-animate\angular-animate.js" />
@@ -207,7 +209,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Scriptables\Filters\" />
-    <Folder Include="Scriptables\Services\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703161902377_Initial.resx">

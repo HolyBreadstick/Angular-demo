@@ -5,13 +5,14 @@
         .module('Controllers')
         .controller('home_controller', home_controller);
 
-    home_controller.$inject = ['$scope'];
+    home_controller.$inject = ['$scope', '$http'];
 
-    function home_controller($scope) {
-        $scope.title = 'home_controller';
+    function home_controller($scope, $http) {
 
-        activate();
+        $scope.SearchArtist = function (artist) {
+            return $http({
 
-        function activate() { }
+            });
+        };
     }
 })();
