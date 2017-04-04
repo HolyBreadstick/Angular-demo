@@ -11,13 +11,18 @@
 
         $scope.State = SessionState.getData();
 
-        $scope.Static = ["Yes", "No"];
+        $scope.ArtistData = {
+            Current: {},
+            Search: []
+        };
 
         $scope.SearchArtist = function (artist) {
             return $http({
                 method: "POST",
                 url: SessionState.Endpoint + "/api/Artist/Search?Artist=" + artist
             }).then(function (success) {
+                //$scope.CurrentArtist = success.data;
+                $scope.ArtistData.Search = success.data;
                 return success.data;
                 })
         };
@@ -35,5 +40,19 @@
         $scope.Clear = function (Field) {
             $scope[Field] = "";
         };
+
+        $scope.Temp = {
+            Image: 'http://www.joshuacasper.com/contents/uploads/joshua-casper-samples-free.jpg',
+            Artist: "Bailey",
+            Album: "Miller"
+        };
+
+
+        $scope.$watch('MusicSearch', function (New, Old) {
+            if (New != undefined) {
+                $scope.ArtistData.Current = New;
+            }
+        });
+
     }
 })();
