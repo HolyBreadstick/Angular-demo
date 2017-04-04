@@ -33,7 +33,8 @@
                 method: "POST",
                 url: SessionState.Endpoint + "/api/Artist/Add?Artist=" + Artist                
             }).then(function (success) {
-                console.log(success.data);
+                //console.log(success.data);
+                $scope.MusicAdd = "";
                 });
         };
 

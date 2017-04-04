@@ -39,6 +39,7 @@ namespace Angular_Demo_Complete.Entities
                 this.price = value;
             } }
         
+        
         public bool downloadImage(String url) {
             var client = new WebClient();
 
@@ -66,7 +67,7 @@ namespace Angular_Demo_Complete.Entities
 
             total = (total*.6);
 
-            return total;
+            return Math.Round(total, 2);
         }
         
     }
