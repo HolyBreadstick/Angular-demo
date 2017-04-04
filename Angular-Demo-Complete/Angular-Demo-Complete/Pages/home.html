@@ -36,7 +36,7 @@
     </div>
 
     <div class="Music-Listing row">
-        <music-Display ng-repeat="albums in State.ArtistData.Current.Albums" data="albums"></music-Display>
+        <music-Display ng-repeat="albums in State.ArtistData.Current.Albums | orderBy: 'price'" data="albums"></music-Display>
     </div>
 
     
