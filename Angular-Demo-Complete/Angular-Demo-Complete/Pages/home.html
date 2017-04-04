@@ -16,15 +16,29 @@
     </div>
 </div>
 <div class="view-start">
-    <form id="MusicSearch" class="Search">
-        <span class="glyphicon glyphicon-search"></span>
-        <input type="text" ng-model="MusicSearch" placeholder="Search Artist" uib-typeahead="art for art in SearchArtist($viewValue)" typeahead-editable="false" autocomplete="off"/>
-    </form>
+    <div id="Searches" class="row">
+        <div class="col-md-6">
+            <form id="MusicSearch" class="Search">
+                <span class="glyphicon glyphicon-search"></span>
+                <input type="text" ng-model="MusicSearch" placeholder="Search Artist" uib-typeahead="art for art in SearchArtist($viewValue)" typeahead-editable="false" autocomplete="off" />
+                <span class="glyphicon glyphicon-remove FakeClickable" ng-click="Clear('MusicSearch')" ng-show="MusicSearch"></span>
+            </form>
+        </div>
 
+        <div class="col-md-6">
+            <form id="PopulateStore" class="Search pull-right">
+                <span class="glyphicon glyphicon-plus-sign FakeClickable" ng-click="AddArtist(MusicAdd)"></span>
+                <input type="text" ng-model="MusicAdd" placeholder="New Artist" autocomplete="off" />
+                <span class="glyphicon glyphicon-remove FakeClickable" ng-click="Clear('MusicAdd')" ng-show="MusicAdd"></span>
+            </form>
+        </div>
+    </div>
 
     <div class="Music-Listing">
 
     </div>
+
+    
 
 </div>
 

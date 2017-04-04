@@ -19,6 +19,21 @@
                 url: SessionState.Endpoint + "/api/Artist/Search?Artist=" + artist
             }).then(function (success) {
                 return success.data;
-                })};
+                })
+        };
+
+
+        $scope.AddArtist = function (Artist) {
+            return $http({
+                method: "POST",
+                url: SessionState.Endpoint + "/api/Artist/Add?Artist=" + Artist                
+            }).then(function (success) {
+                console.log(success.data);
+                });
+        };
+
+        $scope.Clear = function (Field) {
+            $scope[Field] = "";
+        };
     }
 })();
