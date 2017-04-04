@@ -138,33 +138,37 @@ namespace Angular_Demo_Complete.Controllers
 
         private void AddAlbum(Entities.Artist Artist, Models.ArtistSearch.Album[] Albums) {
 
-            var maxSearch = 10;
+            var maxSearch = Albums.Length;
 
             if (Albums.Length < maxSearch)
                 maxSearch = Albums.Length;
 
             //Populate Albums into the Artist
             for (int i = 0; i < maxSearch; i++) {
-
-                
-
-                //Use LastFM api to go get the songs in this album
-                var rawData = client.DownloadString(String.Format(baseUrl + "?method=album.getinfo&api_key={0}&artist={1}&album={2}&format=json",apiKey, Artist.firstName, Albums[i].name));
-                var AlbumSearch = JsonConvert.DeserializeObject<AlbumGetInfo>(rawData);
-
-
-                if (AlbumSearch.album != null)
+                try
                 {
-                    var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text)
+                    //Use LastFM api to go get the songs in this album
+                    var rawData = client.DownloadString(String.Format(baseUrl + "?method=album.getinfo&api_key={0}&artist={1}&album={2}&format=json", apiKey, Artist.firstName, Albums[i].name));
+                    var AlbumSearch = JsonConvert.DeserializeObject<AlbumGetInfo>(rawData);
+
+
+                    if (AlbumSearch.album != null)
                     {
-                        title = AlbumSearch.album.name,
-                        views = int.Parse(AlbumSearch.album.playcount)
-                    };
-                    if (AlbumSearch.album.tracks.track.Length != 0)
-                    {
-                        AddSongs(workingAlbum, AlbumSearch.album.tracks.track);
-                        Artist.Albums.Add(workingAlbum);  
+                        var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text)
+                        {
+                            title = AlbumSearch.album.name,
+                            views = int.Parse(AlbumSearch.album.playcount)
+                        };
+                        if (AlbumSearch.album.tracks.track.Length != 0)
+                        {
+                            AddSongs(workingAlbum, AlbumSearch.album.tracks.track);
+                            Artist.Albums.Add(workingAlbum);
+                        }
                     }
+                }
+                catch (Exception)
+                {
+                    
                 }
 
             }

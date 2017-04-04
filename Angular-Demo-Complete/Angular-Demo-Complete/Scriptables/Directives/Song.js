@@ -21,7 +21,7 @@
             replace: false,
             restrict: "E",
             link: function ($scope, elements, attrs) {
-                $scope.Navigate = SessionState.Navigate;
+
             }
         };
 

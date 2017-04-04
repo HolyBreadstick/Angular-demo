@@ -4,8 +4,8 @@
     <title>Music Content</title>
 </head>
 
-<div class="container col-md-4 text-center music-item">
+<div class="container col-xs-12 col-sm-4 col-md-2 text-center music-item">
     <p>{{data.title}}</p>
-    <img ng-src="data:image/png;base64, {{data.image}}" ng-click="Navigate('album', data.ID)" class="FakeClickable" width="50" height="50" alt="Album cover for {{data.title}}"/>
+    <img ng-src="data:image/png;base64, {{data.image}}" ng-click="Navigate('album', data.ID)" class="FakeClickable" width="150" height="150" alt="Album cover for {{data.title}}"/>
     <p>Price: {{data.price | price}}</p>
 </div>
