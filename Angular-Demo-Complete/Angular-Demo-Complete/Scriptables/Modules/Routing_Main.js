@@ -8,7 +8,8 @@
         // Angular modules 
         'ngRoute',
         // Custom modules 
-        'Controllers'
+        'Controllers',
+        'Filters'
         // 3rd Party Modules
 
     ]);

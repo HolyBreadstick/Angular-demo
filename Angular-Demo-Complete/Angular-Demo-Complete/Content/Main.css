@@ -24,12 +24,11 @@
 cursor: pointer;
 }
 
-.footer {
-margin-top:50px;
+.Music-Listing {
+    padding-bottom: 50px;
 }
 
-.Music-Listing {
-
-    padding-bottom: 50px;
-
+.music-item {
+    padding-top: 25px;
+    padding-bottom: 25px;
 }

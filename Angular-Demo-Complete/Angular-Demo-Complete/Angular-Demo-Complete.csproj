@@ -105,7 +105,9 @@
     <Content Include="Scriptables\Controllers\main_controller.js" />
     <Content Include="Scriptables\Directives\musicDisplay.js" />
     <Content Include="Scriptables\Directives\musicFooter.js" />
+    <Content Include="Scriptables\Filters\price.js" />
     <Content Include="Scriptables\Modules\Controllers.js" />
+    <Content Include="Scriptables\Modules\Filters.js" />
     <Content Include="Scriptables\Modules\Routing_Main.js" />
     <Content Include="Scriptables\Modules\Services.js" />
     <Content Include="Scriptables\Services\SessionState.js" />
@@ -210,7 +212,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Scriptables\Filters\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201703161902377_Initial.resx">

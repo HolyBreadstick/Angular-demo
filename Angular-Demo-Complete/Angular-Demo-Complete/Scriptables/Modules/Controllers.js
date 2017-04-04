@@ -6,7 +6,8 @@
         'ngRoute',
         'ui.bootstrap',
         // Custom modules
-        'Services'
+        'Services',
+        'Filters'
         // 3rd Party Modules
 
     ]);
