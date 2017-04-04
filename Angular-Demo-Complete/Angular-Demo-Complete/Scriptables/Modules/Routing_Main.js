@@ -28,9 +28,11 @@
             .when('/', {
                 templateUrl: 'Pages/home.html?Version=1.6', //Why a query string? This way we can force browser to download new 'versions' as we make big changes
                 controller: 'home_controller'
+            })
+            .when('/album/:id/', {
+                templateUrl: 'Pages/AlbumSearch.html?Version=1.6',
+                controller: 'album_controller'
             });
-
-
     });
     
 

@@ -65,7 +65,9 @@ namespace Angular_Demo_Complete.Entities
                 total += s.price;
             }
 
-            total = (total*.6);
+            if (Songs.Count > 1) {
+                total = (total * .6);
+            }
 
             return Math.Round(total, 2);
         }

@@ -27,10 +27,6 @@
 
 
         //Run time checks for settings
-
-
-
-
         if (State.Session.ForceSSL == true) {
             var forceSSL = function () {
                 if ($location.protocol() !== 'https') {
@@ -42,6 +38,26 @@
 
         //==========================
 
+        //Navigation functions
+
+        State.Navigate = function (path, id) {
+            if (id != undefined | id != null) {
+                $location.path(path + "/" + id)
+            } else if (path != undefined | path != null) {
+                $location.path(path);
+            }
+        };
+
+        State.StartLoading = function () {
+
+            State.Session.Loading = true;
+            
+        };
+
+        State.EndLoading = function () {
+            State.Session.Loading = false;
+        };
+        //======================================
         
 
 

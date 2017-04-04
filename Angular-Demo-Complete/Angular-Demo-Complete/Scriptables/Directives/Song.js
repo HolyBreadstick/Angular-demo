@@ -3,18 +3,18 @@
 
     angular
         .module('Routing_Main')
-        .directive('musicDisplay', musicDisplay);
+        .directive('song', song);
 
-    musicDisplay.$inject = ['$window', 'SessionState'];
+    song.$inject = ['$window', 'SessionState'];
 
-    function musicDisplay($window, SessionState) {
+    function song($window, SessionState) {
         // Usage:
         //     <musicDisplay></musicDisplay>
         // Creates:
         // 
-        
+
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/MusicDisplay/MusicDisplay.html",
+            templateUrl: "/Pages/Templates/Directives/Song/Song.html",
             scope: {
                 data: "="
             },

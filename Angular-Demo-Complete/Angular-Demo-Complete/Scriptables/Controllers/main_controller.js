@@ -5,13 +5,11 @@
         .module('Controllers')
         .controller('main_controller', main_controller);
 
-    main_controller.$inject = ['$scope'];
+    main_controller.$inject = ['$scope', 'SessionState'];
 
-    function main_controller($scope) {
-        $scope.title = 'main_controller';
+    function main_controller($scope, SessionState) {
 
-        activate();
+        $scope.State = SessionState.getData();
 
-        function activate() { }
     }
 })();

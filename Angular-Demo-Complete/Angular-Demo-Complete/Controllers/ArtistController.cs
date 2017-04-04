@@ -70,6 +70,18 @@ namespace Angular_Demo_Complete.Controllers
             return data;
         }
 
+        [Route("Album/Search")]
+        public object SearchAlbum(int Album) {
+            var data = (from search in db.Albums where search.ID == Album select search).SingleOrDefault();
+
+            data.views += 1;
+
+            db.SaveChanges();
+
+            //System.Threading.Thread.Sleep(Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds));
+
+            return data;
+        }
         private void AddAlbum(Entities.Artist Artist, Models.ArtistSearch.Album[] Albums) {
 
             var maxSearch = 5;

@@ -1,0 +1,22 @@
+﻿<div class="view-start" ng-show="!State.Session.Loading">
+    <div class="row">
+        <div class="col-md-3">
+            <img ng-src="data:image/png;base64, {{Album.image}}" width="250" height="250" alt="Album cover for {{Album.title}}" />
+        </div>
+        <div class="col-md-9">
+            <p>Price: {{Album.price | price}}</p>
+            <p>Views: {{Album.views | number}}</p>
+        </div>
+    </div>
+
+    <div class="row Music-Listing">
+        <div class="page-header text-center">
+            <h1>{{Album.title}} Songs</h1>
+        </div>
+        <div class="col-md-8 col-md-offset-2">
+            <song ng-repeat="Song in Album.Songs" data="Song"></song>
+        </div>
+    </div>
+</div>
+
+<loader class="view-start" ng-show="State.Session.Loading"></loader>
