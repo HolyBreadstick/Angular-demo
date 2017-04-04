@@ -25,6 +25,7 @@
             ArtistData: {
                 Current: {},
                 Search: [],
+                All: [],
                 MusicAdd: "",
                 MusicSearch: "",
                 MusicAddLoading: false

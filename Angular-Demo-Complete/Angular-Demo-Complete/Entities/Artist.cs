@@ -16,6 +16,8 @@ namespace Angular_Demo_Complete.Entities
         [MaxLength(999)]
         public String firstName { get; set; }
 
+        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
+
         public virtual List<Album> Albums { get; set; } = new List<Album>();
     }
 }

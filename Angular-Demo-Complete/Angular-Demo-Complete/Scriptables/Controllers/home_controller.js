@@ -10,11 +10,17 @@
     function home_controller($scope, $http, SessionState) {
 
         $scope.State = SessionState.getData();
-
-        $scope.ArtistData = {
-            Current: {},
-            Search: []
+        
+        $scope.LoadAll = function () {
+            return $http({
+                method: "GET",
+                url: SessionState.Endpoint + "/api/Artist/All"
+            }).then(function (success) {
+                $scope.State.ArtistData.All = success.data;
+                });
         };
+
+
 
         $scope.SearchArtist = function (artist) {
             return $http({
@@ -48,7 +54,7 @@
 
 
         $scope.$watch('State.ArtistData.MusicSearch', function (New, Old) {
-            if (New != undefined) {
+            if (New != undefined | New != "") {
                 $scope.State.ArtistData.Current = New;
                 console.log($scope.ArtistData);
             } else {
@@ -56,5 +62,6 @@
             }
         });
 
+        $scope.LoadAll();
     }
 })();

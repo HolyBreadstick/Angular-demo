@@ -7,6 +7,7 @@ using System.Web.Http;
 using Newtonsoft.Json;
 using Angular_Demo_Complete.Models.ArtistSearch;
 using Angular_Demo_Complete.Models;
+using System.Data.Entity.SqlServer;
 
 namespace Angular_Demo_Complete.Controllers
 {
@@ -31,11 +32,7 @@ namespace Angular_Demo_Complete.Controllers
         [Route("All")]
         public object GetAllArtist()
         {
-
-            var AllArtist = db.Artist.ToList();
-
-            return AllArtist;
-
+            return db.Albums.ToList();
         }
 
         [Route("RefreshAll")]
@@ -43,21 +40,14 @@ namespace Angular_Demo_Complete.Controllers
             var timer = new System.Diagnostics.Stopwatch();
 
             timer.Start();
-            var allArtistNames = (from data in db.Artist select data.firstName).ToList();
 
+            //Keeps Artist and their data if the data is not a day old.
+            var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 select data.firstName).ToList();
+            
             foreach (var art in allArtistNames) {
                 RemoveArtist(art);
             }
-
-            //Clear out all rogue songs.
-            db.Songs.RemoveRange(db.Songs);
-
-            //Clear rogue albums
-            db.Albums.RemoveRange(db.Albums);
-
-            //Clear rogue artist
-            db.Artist.RemoveRange(db.Artist);
-
+            
             foreach (var art in allArtistNames) {
                 AddArtist(art);
             }
