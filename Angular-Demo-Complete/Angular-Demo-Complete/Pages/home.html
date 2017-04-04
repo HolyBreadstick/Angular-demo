@@ -35,7 +35,7 @@
     </div>
 
     <div class="Music-Listing">
-        <music-Display data="Temp"></music-Display>
+        <music-Display ng-repeat="albums in ArtistData.Current.Albums" data="albums"></music-Display>
     </div>
 
     

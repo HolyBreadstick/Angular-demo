@@ -5,6 +5,6 @@
 </head>
 
 <div class="container col-md-4 text-center">
-    <img ng-src="{{data.Image}}" width="50" height="50" alt="Album cover for {{data.Album}}"/>
+    <img ng-src="data:image/png;base64, {{data.image}}" width="50" height="50" alt="Album cover for {{data.Album}}"/>
     <p>{{data.Artist}}</p>
 </div>

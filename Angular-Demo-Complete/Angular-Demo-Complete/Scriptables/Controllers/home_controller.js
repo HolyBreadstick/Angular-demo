@@ -51,6 +51,9 @@
         $scope.$watch('MusicSearch', function (New, Old) {
             if (New != undefined) {
                 $scope.ArtistData.Current = New;
+                console.log($scope.ArtistData);
+            } else {
+                $scope.ArtistData.Current = null;
             }
         });
 
