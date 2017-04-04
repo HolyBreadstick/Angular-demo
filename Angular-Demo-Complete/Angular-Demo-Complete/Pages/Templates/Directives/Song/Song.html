@@ -6,7 +6,7 @@
 
 <div class="container col-xs-12 spacing">
     <div class="row song-item">
-        <p class="col-xs-6 pull-left"><span class="glyphicon glyphicon-cd"></span> {{data.title}}</p>
-        <p class="col-xs-6 text-right">Price: {{data.price | price}}</p>
+        <p class="col-xs-10 pull-left"><span class="glyphicon glyphicon-cd"></span> {{data.title | limitTo: 100}}</p>
+        <p class="col-xs-2 text-right">Price: {{data.price | price}}</p>
     </div>
 </div>

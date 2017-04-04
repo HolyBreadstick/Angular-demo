@@ -38,27 +38,82 @@ namespace Angular_Demo_Complete.Controllers
 
         }
 
+        [Route("RefreshAll")]
+        public object RefreshAllContent() {
+            var timer = new System.Diagnostics.Stopwatch();
+
+            timer.Start();
+            var allArtistNames = (from data in db.Artist select data.firstName).ToList();
+
+            foreach (var art in allArtistNames) {
+                RemoveArtist(art);
+            }
+
+            //Clear out all rogue songs.
+            db.Songs.RemoveRange(db.Songs);
+
+            //Clear rogue albums
+            db.Albums.RemoveRange(db.Albums);
+
+            //Clear rogue artist
+            db.Artist.RemoveRange(db.Artist);
+
+            foreach (var art in allArtistNames) {
+                AddArtist(art);
+            }
+            db.SaveChanges();
+            timer.Stop();
+            return new {
+                ExecutionTime = timer.Elapsed,
+                ArtistRefreshed = allArtistNames
+            };
+        }
+
+        [Route("Remove")]
+        public void RemoveArtist(String Artist) {
+            var artist = (from data in db.Artist where data.firstName == Artist select data).First();
+
+            foreach (var alb in artist.Albums) {
+                alb.Songs.RemoveRange(0, alb.Songs.Count);
+            }
+            artist.Albums.RemoveRange(0, artist.Albums.Count);
+            db.Artist.Remove(artist);
+            db.SaveChanges();
+
+
+        }
         [Route("Add")]
         public object AddArtist(String Artist)
         {
-
-            
-
-            //Need to make call to get the artist data
-            var rawData = client.DownloadString(String.Format(baseUrl + "?method=artist.gettopalbums&artist={0}&api_key={1}&format=json", Artist, apiKey));
-
-            var ArtistSearch = JsonConvert.DeserializeObject<ArtistTopAlbums>(rawData);
             var Art = new Entities.Artist();
-
-            //Need to verify that artist doesn't already exist
-            var searchInner = (from data in db.Artist where data.firstName.Contains(ArtistSearch.topalbums.attr.artist) select data).ToList();
-            if (searchInner.Count == 0) {
-                Art.firstName = ArtistSearch.topalbums.attr.artist;
-                AddAlbum(Art, ArtistSearch.topalbums.album);
-                db.Artist.Add(Art);
-                db.SaveChanges();
+            if (Artist.Contains(","))
+            {
+                var allArtist = Artist.Split(',');
+                foreach (var art in allArtist)
+                {
+                    AddArtist(art.Trim());
+                }
             }
+            else {
+                //Need to make call to get the artist data
+                var rawData = client.DownloadString(String.Format(baseUrl + "?method=artist.gettopalbums&artist={0}&api_key={1}&format=json", Artist, apiKey));
 
+                var ArtistSearch = JsonConvert.DeserializeObject<ArtistTopAlbums>(rawData);
+                
+
+
+                //Need to verify that artist doesn't already exist
+                var searchInner = (from data in db.Artist where data.firstName.Contains(ArtistSearch.topalbums.attr.artist) select data).ToList();
+                if (searchInner.Count == 0)
+                {
+                    Art.firstName = ArtistSearch.topalbums.attr.artist;
+                    AddAlbum(Art, ArtistSearch.topalbums.album);
+                    db.Artist.Add(Art);
+                    db.SaveChanges();
+                }
+
+                
+            }
             return Art;
 
         }
@@ -66,6 +121,8 @@ namespace Angular_Demo_Complete.Controllers
         [Route("Search")]
         public object SearchArtist(String Artist) {
             var data = (from search in db.Artist where search.firstName.Contains(Artist) select search).Take(10).ToList();
+
+            
 
             return data;
         }
@@ -82,9 +139,10 @@ namespace Angular_Demo_Complete.Controllers
 
             return data;
         }
+
         private void AddAlbum(Entities.Artist Artist, Models.ArtistSearch.Album[] Albums) {
 
-            var maxSearch = 5;
+            var maxSearch = 10;
 
             if (Albums.Length < maxSearch)
                 maxSearch = Albums.Length;
@@ -106,8 +164,11 @@ namespace Angular_Demo_Complete.Controllers
                         title = AlbumSearch.album.name,
                         views = int.Parse(AlbumSearch.album.playcount)
                     };
-                    AddSongs(workingAlbum, AlbumSearch.album.tracks.track);
-                    Artist.Albums.Add(workingAlbum); 
+                    if (AlbumSearch.album.tracks.track.Length != 0)
+                    {
+                        AddSongs(workingAlbum, AlbumSearch.album.tracks.track);
+                        Artist.Albums.Add(workingAlbum);  
+                    }
                 }
 
             }

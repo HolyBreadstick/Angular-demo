@@ -16,7 +16,17 @@
         var directive = {
             templateUrl: "/Pages/Templates/Directives/Loader/Loader.html",
             replace: false,
-            restrict: "E"
+            restrict: "E",
+            scope: {
+                height: "@",
+                width: "@",
+                inline: "@"
+            },
+            link: function ($scope, element, attrs) {
+                if ($scope.inline == 'true') {
+                    element.addClass("inline-block");
+                }
+            }
         };
 
 

@@ -22,39 +22,37 @@
                 url: SessionState.Endpoint + "/api/Artist/Search?Artist=" + artist
             }).then(function (success) {
                 //$scope.CurrentArtist = success.data;
-                $scope.ArtistData.Search = success.data;
+                $scope.State.ArtistData.Search = success.data;
                 return success.data;
                 })
         };
 
 
         $scope.AddArtist = function (Artist) {
+            $scope.State.ArtistData.MusicAddLoading = true;
             return $http({
                 method: "POST",
                 url: SessionState.Endpoint + "/api/Artist/Add?Artist=" + Artist                
             }).then(function (success) {
                 //console.log(success.data);
-                $scope.MusicAdd = "";
+                $scope.State.ArtistData.MusicAdd = "";
+                $scope.State.ArtistData.MusicAddLoading = false;
                 });
         };
 
         $scope.Clear = function (Field) {
-            $scope[Field] = "";
+            $scope.State.ArtistData[Field] = "";
         };
 
-        $scope.Temp = {
-            Image: 'http://www.joshuacasper.com/contents/uploads/joshua-casper-samples-free.jpg',
-            Artist: "Bailey",
-            Album: "Miller"
-        };
+        
 
 
-        $scope.$watch('MusicSearch', function (New, Old) {
+        $scope.$watch('State.ArtistData.MusicSearch', function (New, Old) {
             if (New != undefined) {
-                $scope.ArtistData.Current = New;
+                $scope.State.ArtistData.Current = New;
                 console.log($scope.ArtistData);
             } else {
-                $scope.ArtistData.Current = null;
+                $scope.State.ArtistData.Current = null;
             }
         });
 

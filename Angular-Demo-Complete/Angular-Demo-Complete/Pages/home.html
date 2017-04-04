@@ -20,22 +20,23 @@
         <div class="col-xs-6">
             <form id="MusicSearch" class="Search">
                 <span class="glyphicon glyphicon-search"></span>
-                <input type="text" ng-model="MusicSearch" placeholder="Search Artist" uib-typeahead="art as art.firstName for art in SearchArtist($viewValue)" typeahead-editable="false" autocomplete="off" />
-                <span class="glyphicon glyphicon-remove FakeClickable" ng-click="Clear('MusicSearch')" ng-show="MusicSearch"></span>
+                <input type="text" ng-model="State.ArtistData.MusicSearch" placeholder="Search Artist" uib-typeahead="art as art.firstName for art in SearchArtist($viewValue)" typeahead-editable="false" autocomplete="off" />
+                <span class="glyphicon glyphicon-remove FakeClickable" ng-click="Clear('MusicSearch')" ng-show="State.ArtistData.MusicSearch"></span>
             </form>
         </div>
 
         <div class="col-xs-6">
             <form id="PopulateStore" class="Search pull-right">
-                <span class="glyphicon glyphicon-plus-sign FakeClickable" ng-click="AddArtist(MusicAdd)"></span>
-                <input type="text" ng-model="MusicAdd" placeholder="New Artist" autocomplete="off" />
-                <span class="glyphicon glyphicon-remove FakeClickable" ng-click="Clear('MusicAdd')" ng-show="MusicAdd"></span>
+                <loader width="10" height="10" inline="true" ng-show="State.ArtistData.MusicAddLoading"></loader>
+                <span class="glyphicon glyphicon-plus-sign FakeClickable" ng-show="State.ArtistData.MusicAdd" ng-click="AddArtist(State.ArtistData.MusicAdd)"></span>
+                <input type="text" ng-model="State.ArtistData.MusicAdd" placeholder="New Artist" autocomplete="off" />
+                <span class="glyphicon glyphicon-remove FakeClickable" ng-click="Clear('MusicAdd')" ng-show="State.ArtistData.MusicAdd"></span>
             </form>
         </div>
     </div>
 
     <div class="Music-Listing row">
-        <music-Display ng-repeat="albums in ArtistData.Current.Albums" data="albums"></music-Display>
+        <music-Display ng-repeat="albums in State.ArtistData.Current.Albums" data="albums"></music-Display>
     </div>
 
     

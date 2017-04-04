@@ -21,7 +21,14 @@
             Errors: {
                 
             },
-            Endpoint: 'http://localhost:50569/'
+            Endpoint: 'http://localhost:50569/',
+            ArtistData: {
+                Current: {},
+                Search: [],
+                MusicAdd: "",
+                MusicSearch: "",
+                MusicAddLoading: false
+            }
         };
 
 
