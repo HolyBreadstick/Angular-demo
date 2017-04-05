@@ -46,7 +46,8 @@ namespace Angular_Demo_Complete.Controllers
             var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 | true==Force select data.firstName).ToList();
 
             for (int i = 0; i < allArtistNames.Count; i++) {
-                if ((from data in db.Artist where data.firstName == allArtistNames[i] select data.firstName).Single() == allArtistNames[i]) {
+                if ((from data in db.Artist where data.Albums.Count == 0 select data.firstName).ToList().Contains(allArtistNames[i])) {
+                    RemoveArtist(allArtistNames[i]);
                     allArtistNames.RemoveAt(i);
                 }
             }
