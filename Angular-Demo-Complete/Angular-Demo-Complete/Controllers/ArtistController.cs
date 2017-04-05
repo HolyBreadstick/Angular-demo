@@ -44,7 +44,13 @@ namespace Angular_Demo_Complete.Controllers
 
             //Keeps Artist and their data if the data is not a day old.
             var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 | true==Force select data.firstName).ToList();
-            
+
+            for (int i = 0; i < allArtistNames.Count; i++) {
+                if ((from data in db.Artist where data.firstName == allArtistNames[i] select data.firstName).Single() == allArtistNames[i]) {
+                    allArtistNames.RemoveAt(i);
+                }
+            }
+
             foreach (var art in allArtistNames) {
                 RemoveArtist(art);
             }
@@ -53,6 +59,8 @@ namespace Angular_Demo_Complete.Controllers
             db.Songs.RemoveRange(rogueSongs);
 
             db.Albums.RemoveRange((from data in db.Albums where data.Owner == null select data));
+
+
 
             foreach (var art in allArtistNames) {
                 AddArtist(art);
