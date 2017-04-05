@@ -103,9 +103,12 @@ namespace Angular_Demo_Complete.Controllers
                     if (searchInner.Count == 0)
                     {
                         Art.firstName = ArtistSearch.topalbums.attr.artist;
-                        AddAlbum(Art, ArtistSearch.topalbums.album);
-                        db.Artist.Add(Art);
-                        db.SaveChanges();
+                        if (ArtistSearch.topalbums.album.Length != 0)
+                        {
+                            AddAlbum(Art, ArtistSearch.topalbums.album);
+                            db.Artist.Add(Art);
+                            db.SaveChanges(); 
+                        }
                     } 
                 }
 
