@@ -17,8 +17,6 @@ namespace Angular_Demo_Complete.Migrations
         protected override void Seed(Angular_Demo_Complete.MusicContext context)
         {
             
-
-
         }
     }
 }
