@@ -5,22 +5,41 @@
         .module('Controllers')
         .controller('home_controller', home_controller);
 
-    home_controller.$inject = ['$scope', '$http', 'SessionState'];
+    home_controller.$inject = ['$scope', '$http', 'SessionState', '$interval', '$rootScope'];
 
-    function home_controller($scope, $http, SessionState) {
+    function home_controller($scope, $http, SessionState, $interval, $rootScope) {
 
         $scope.State = SessionState.getData();
-        
+        $scope.Searchables = [];
+        $scope.SearchPromise = {};
         $scope.LoadAll = function () {
             return $http({
                 method: "GET",
-                url: SessionState.Endpoint + "/api/Artist/All"
+                url: SessionState.Endpoint + "api/Artist/All"
             }).then(function (success) {
-                $scope.State.ArtistData.All = success.data;
+                $scope.Searchables = success.data;
+                if (SessionState.ArtistData.All.length == 0 | SessionState.ArtistData.All.length < 25) {
+                    $scope.SearchPromise = $interval(albumWorker, 1000, 25, true);
+                }
                 });
         };
 
+        function albumWorker() {
+            $scope.AlbumSearch();
+        }
 
+        $rootScope.$on("CancelSearch", function () {
+            $interval.cancel($scope.SearchPromise);
+        });
+
+        $scope.AlbumSearch = function () {
+            return $http({
+                url: SessionState.Endpoint + "api/Artist/Album/Search?Album=" + $scope.Searchables.shift(),
+                method: "POST"
+            }).then(function (success) {
+                SessionState.ArtistData.All.push(success.data);
+            });
+        };
 
         $scope.SearchArtist = function (artist) {
             return $http({
@@ -54,8 +73,9 @@
 
 
         $scope.$watch('State.ArtistData.MusicSearch', function (New, Old) {
-            if (New != undefined | New != "") {
+            if (New != undefined & New != "") {
                 $scope.State.ArtistData.Current = New;
+                $interval.cancel($scope.SearchPromise);
                 console.log($scope.ArtistData);
             } else {
                 $scope.State.ArtistData.Current = null;

@@ -39,6 +39,12 @@ namespace Angular_Demo_Complete.Entities
                 this.price = value;
             } }
         
+        [NotMapped]
+        public String ArtistName { get {
+                return this.Owner.firstName;
+            } set {
+                ArtistName = value;
+            } }
         
         public bool downloadImage(String url) {
             var client = new WebClient();

@@ -5,7 +5,7 @@
 </head>
 
 <div class="container col-xs-12 col-sm-4 col-md-2 text-center music-item">
-    <p>{{data.title}}</p>
+    <p>{{data.title}} by {{data.ArtistName}}</p>
     <img ng-src="data:image/png;base64, {{data.image}}" ng-click="Navigate('album', data.ID)" class="FakeClickable" width="150" height="150" alt="Album cover for {{data.title}}"/>
     <p>Price: {{data.price | price}}</p>
 </div>

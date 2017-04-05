@@ -40,7 +40,7 @@
             <music-Display ng-repeat="albums in State.ArtistData.Current.Albums | orderBy: 'price'" data="albums"></music-Display>
         </div>
         <div ng-if="!State.ArtistData.MusicSearch">
-            <music-Display ng-repeat="albums in State.ArtistData.All | orderBy: 'price' | limitTo: State.ArtistData.All.Albums / 4" data="albums"></music-Display>
+            <music-Display ng-repeat="albums in State.ArtistData.All | orderBy: 'price'" data="albums"></music-Display>
         </div>
     </div>
 

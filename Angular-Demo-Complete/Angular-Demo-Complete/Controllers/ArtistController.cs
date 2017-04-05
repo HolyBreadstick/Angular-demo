@@ -30,24 +30,30 @@ namespace Angular_Demo_Complete.Controllers
 
 
         [Route("All")]
-        public object GetAllArtist()
+        public object GetAllArtistID()
         {
-            return db.Albums.ToList();
+            var info = (from data in db.Albums orderby data.ID select data.ID);
+            return info.Skip(new Random().Next(info.Count()-25)).ToList();
         }
 
         [Route("RefreshAll")]
-        public object RefreshAllContent() {
+        public object RefreshAllContent(Boolean Force = false) {
             var timer = new System.Diagnostics.Stopwatch();
 
             timer.Start();
 
             //Keeps Artist and their data if the data is not a day old.
-            var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 select data.firstName).ToList();
+            var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 | true==Force select data.firstName).ToList();
             
             foreach (var art in allArtistNames) {
                 RemoveArtist(art);
             }
-            
+
+            var rogueSongs = (from data in db.Songs where data.Owner == null select data);
+            db.Songs.RemoveRange(rogueSongs);
+
+            db.Albums.RemoveRange((from data in db.Albums where data.Owner == null select data));
+
             foreach (var art in allArtistNames) {
                 AddArtist(art);
             }
@@ -90,16 +96,17 @@ namespace Angular_Demo_Complete.Controllers
 
                 var ArtistSearch = JsonConvert.DeserializeObject<ArtistTopAlbums>(rawData);
                 
-
-
-                //Need to verify that artist doesn't already exist
-                var searchInner = (from data in db.Artist where data.firstName.Contains(ArtistSearch.topalbums.attr.artist) select data).ToList();
-                if (searchInner.Count == 0)
+                if (ArtistSearch != null && ArtistSearch.topalbums != null)
                 {
-                    Art.firstName = ArtistSearch.topalbums.attr.artist;
-                    AddAlbum(Art, ArtistSearch.topalbums.album);
-                    db.Artist.Add(Art);
-                    db.SaveChanges();
+                    //Need to verify that artist doesn't already exist
+                    var searchInner = (from data in db.Artist where data.firstName.Contains(ArtistSearch.topalbums.attr.artist) select data).ToList();
+                    if (searchInner.Count == 0)
+                    {
+                        Art.firstName = ArtistSearch.topalbums.attr.artist;
+                        AddAlbum(Art, ArtistSearch.topalbums.album);
+                        db.Artist.Add(Art);
+                        db.SaveChanges();
+                    } 
                 }
 
                 
@@ -142,7 +149,7 @@ namespace Angular_Demo_Complete.Controllers
                     var AlbumSearch = JsonConvert.DeserializeObject<AlbumGetInfo>(rawData);
 
 
-                    if (AlbumSearch.album != null)
+                    if (AlbumSearch.album != null && !String.IsNullOrEmpty(Albums[i].image[Albums[i].image.Length - 1].text))
                     {
                         var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text)
                         {

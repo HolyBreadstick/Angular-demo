@@ -5,9 +5,9 @@
         .module('Services')
         .service('SessionState', SessionState);
 
-    SessionState.$inject = ['$location'];
+    SessionState.$inject = ['$location', '$rootScope'];
 
-    function SessionState($location) {
+    function SessionState($location, $rootScope) {
 
         var State = {
             Session: {
@@ -49,6 +49,7 @@
         //Navigation functions
 
         State.Navigate = function (path, id) {
+            $rootScope.$broadcast("CancelSearch", null);
             if (id != undefined | id != null) {
                 $location.path(path + "/" + id)
             } else if (path != undefined | path != null) {
