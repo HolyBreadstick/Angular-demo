@@ -169,9 +169,9 @@ namespace Angular_Demo_Complete.Controllers
             }).SingleOrDefault();
             
 
-            var increaseNum = (from search in db.Albums where search.ID == Album select search.views).SingleOrDefault();
+            var increaseNum = (from search in db.Albums where search.ID == Album select search).SingleOrDefault();
 
-            increaseNum += 1;
+            increaseNum.views += 1;
 
             db.SaveChanges();
 
