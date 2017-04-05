@@ -149,6 +149,7 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\angular\angular.js" />
     <Content Include="Scripts\angular\angular.min.js" />
@@ -162,9 +163,9 @@
     <Content Include="Scripts\jquery.signalR-2.2.1.js" />
     <Content Include="Scripts\jquery.signalR-2.2.1.min.js" />
     <Content Include="Scripts\ng-map.min.js" />
-    <Content Include="Scripts\select.js" />
-    <Content Include="Scripts\select.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
@@ -200,9 +201,16 @@
     <Compile Include="Migrations\201704042219463_ArtistAddDate.Designer.cs">
       <DependentUpon>201704042219463_ArtistAddDate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704050258232_SmootherImageLoading.cs" />
+    <Compile Include="Migrations\201704050258232_SmootherImageLoading.Designer.cs">
+      <DependentUpon>201704050258232_SmootherImageLoading.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Migrations\Models\AlbumGetInfo.cs" />
-    <Compile Include="Migrations\Models\ArtistTopAlbums.cs" />
+    <Compile Include="Models\AlbumGetInfo.cs" />
+    <Compile Include="Models\ArtistTopAlbums.cs" />
+    <Compile Include="Models\FastAlbumSearch.cs" />
+    <Compile Include="Models\FastArtistSearch.cs" />
+    <Compile Include="Models\FastSongSearch.cs" />
     <Compile Include="MusicContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -210,7 +218,6 @@
     <Content Include="packages.config" />
     <Content Include="Scripts\angular.min.js.map" />
     <Content Include="Scripts\angular-route.min.js.map" />
-    <Content Include="Scripts\select.min.js.map" />
     <Content Include="Content\select.min.css.map" />
     <Content Include="Scripts\angular-cookies.min.js.map" />
     <Content Include="Scripts\jquery-1.9.1.min.map" />
@@ -242,6 +249,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704042219463_ArtistAddDate.resx">
       <DependentUpon>201704042219463_ArtistAddDate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704050258232_SmootherImageLoading.resx">
+      <DependentUpon>201704050258232_SmootherImageLoading.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

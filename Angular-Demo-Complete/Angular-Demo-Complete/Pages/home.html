@@ -17,7 +17,7 @@
 </div>
 <div class="view-start">
     <div id="Searches" class="row">
-        <div class="col-xs-12 col-md-6" style="display:inline-block">
+        <div class="col-xs-12 col-sm-6 col-md-6" style="display:inline-block">
             <form id="MusicSearch" class="Search">
                 <span class="glyphicon glyphicon-search"></span>
                 <input type="text" ng-model="State.ArtistData.MusicSearch" placeholder="Search Artist" uib-typeahead="art as art.firstName for art in SearchArtist($viewValue)" typeahead-editable="false" autocomplete="off" />
@@ -25,7 +25,7 @@
             </form>
         </div>
 
-        <div class="col-xs-12 col-md-6 pull-right" style="display:inline-block">
+        <div class="col-xs-12 col-sm-6 col-md-6 pull-right" style="display:inline-block">
             <form id="PopulateStore" class="Search pull-right">
                 <loader width="10" height="10" inline="true" ng-show="State.ArtistData.MusicAddLoading"></loader>
                 <span class="glyphicon glyphicon-plus-sign FakeClickable" ng-show="State.ArtistData.MusicAdd" ng-click="AddArtist(State.ArtistData.MusicAdd)"></span>
@@ -36,9 +36,10 @@
     </div>
 
     <div class="Music-Listing row">
-        <div ng-if="State.ArtistData.MusicSearch">
+        <div ng-if="State.ArtistData.MusicSearch" ng-show="!State.Session.Loading">
             <music-Display ng-repeat="albums in State.ArtistData.Current.Albums | orderBy: 'price'" data="albums"></music-Display>
         </div>
+        <loader ng-show="State.Session.Loading"></loader>
         <div ng-if="!State.ArtistData.MusicSearch">
             <music-Display ng-repeat="albums in State.ArtistData.All | orderBy: 'price'" data="albums"></music-Display>
         </div>

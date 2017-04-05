@@ -32,6 +32,8 @@ namespace Angular_Demo_Complete.Entities
 
         public byte[] image { get; set; }
 
+        public String imageLink { get; set; }
+
         [NotMapped]
         public double price { get {
                 return calculatePrice();

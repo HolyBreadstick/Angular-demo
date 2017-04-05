@@ -117,14 +117,61 @@ namespace Angular_Demo_Complete.Controllers
 
         [Route("Search")]
         public object SearchArtist(String Artist) {
-            return (from search in db.Artist where search.firstName.Contains(Artist) select search).Take(10).ToList();
+            return (from search in db.Artist where search.firstName.Contains(Artist) select new {
+                ID = search.ID,
+                AddedAt = search.AddedAt,
+                firstName = search.firstName
+            }).Take(10).ToList();
+        }
+
+        [Route("Search/Artist")]
+        public object SearchArtistCollection(String Artist) {
+             var obj = (from data in db.Artist where data.firstName == Artist select new FastArtistSearch() {
+                 ID = data.ID,
+                 AddedAt = data.AddedAt,
+                 firstName = data.firstName,
+                 Albums = (from dt in data.Albums select new FastAlbumSearch() {
+                     ArtistName = dt.Owner.firstName,
+                     ID = dt.ID,
+                     imageLink = dt.imageLink,
+                     title = dt.title,
+                     views = dt.views,
+                     Songs = (from ds in dt.Songs select new FastSongSearch() {
+                         discount = ds.discount,
+                         ID = ds.ID,
+                         onSale = ds.onSale,
+                         storedPrice = ds.storedPrice,
+                         title = ds.title
+                     }).ToList()
+                 }).ToList()
+             }).SingleOrDefault(); 
+
+            return obj;
+
+
         }
 
         [Route("Album/Search")]
         public object SearchAlbum(int Album) {
-            var data = (from search in db.Albums where search.ID == Album select search).SingleOrDefault();
+            var data = (from search in db.Albums where search.ID == Album select new FastAlbumSearch() {
+                ID = search.ID,
+                title = search.title,
+                Songs = search.Songs.Select(song=> new FastSongSearch() {
+                    ID = song.ID,
+                    discount = song.discount,
+                    onSale = song.onSale,
+                    storedPrice = song.storedPrice,
+                    title = song.title
+                }).ToList(),
+                ArtistName = search.Owner.firstName,
+                imageLink = search.imageLink,
+                views = search.views
+            }).SingleOrDefault();
+            
 
-            data.views += 1;
+            var increaseNum = (from search in db.Albums where search.ID == Album select search.views).SingleOrDefault();
+
+            increaseNum += 1;
 
             db.SaveChanges();
 
@@ -154,7 +201,8 @@ namespace Angular_Demo_Complete.Controllers
                         var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text)
                         {
                             title = AlbumSearch.album.name,
-                            views = int.Parse(AlbumSearch.album.playcount)
+                            views = int.Parse(AlbumSearch.album.playcount),
+                            imageLink = Albums[i].image[Albums[i].image.Length - 1].text
                         };
                         if (AlbumSearch.album.tracks.track.Length != 0)
                         {

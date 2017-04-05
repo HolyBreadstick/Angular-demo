@@ -5,9 +5,9 @@
         .module('Controllers')
         .controller('home_controller', home_controller);
 
-    home_controller.$inject = ['$scope', '$http', 'SessionState', '$interval', '$rootScope'];
+    home_controller.$inject = ['$scope', '$http', 'SessionState', '$timeout', '$rootScope'];
 
-    function home_controller($scope, $http, SessionState, $interval, $rootScope) {
+    function home_controller($scope, $http, SessionState, $timeout, $rootScope) {
 
         $scope.State = SessionState.getData();
         $scope.Searchables = [];
@@ -18,19 +18,11 @@
                 url: SessionState.Endpoint + "api/Artist/All"
             }).then(function (success) {
                 $scope.Searchables = success.data;
-                if (SessionState.ArtistData.All.length == 0 | SessionState.ArtistData.All.length < 25) {
-                    $scope.SearchPromise = $interval(albumWorker, 1000, 25, true);
-                }
+                $scope.AlbumSearch();
                 });
         };
-
-        function albumWorker() {
-            $scope.AlbumSearch();
-        }
-
-        $rootScope.$on("CancelSearch", function () {
-            $interval.cancel($scope.SearchPromise);
-        });
+        
+        
 
         $scope.AlbumSearch = function () {
             return $http({
@@ -38,6 +30,9 @@
                 method: "POST"
             }).then(function (success) {
                 SessionState.ArtistData.All.push(success.data);
+                if (SessionState.ArtistData.All.length < 25) {
+                    $timeout($scope.AlbumSearch, 500);
+                }
             });
         };
 
@@ -74,11 +69,19 @@
 
         $scope.$watch('State.ArtistData.MusicSearch', function (New, Old) {
             if (New != undefined & New != "") {
-                $scope.State.ArtistData.Current = New;
-                $interval.cancel($scope.SearchPromise);
-                console.log($scope.ArtistData);
+                $scope.State.Session.Loading = true;
+                return $http({
+                    url: SessionState.Endpoint + "/api/Artist/Search/Artist?Artist=" + New.firstName,
+                    method: "POST"
+                }).then(function (success) {
+                    $scope.State.ArtistData.Current = success.data;
+                    $scope.State.Session.Loading = false;
+                    }), function (error) {
+                        console.log(error);
+                    };
             } else {
                 $scope.State.ArtistData.Current = null;
+                $scope.State.Session.Loading = false;
             }
         });
 

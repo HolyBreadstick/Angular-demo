@@ -1,7 +1,7 @@
 ﻿<div class="view-start" ng-show="!State.Session.Loading">
     <div class="row">
         <div class="col-md-3">
-            <img ng-src="data:image/png;base64, {{Album.image}}" width="250" height="250" alt="Album cover for {{Album.title}}" />
+            <img ng-src="{{Album.imageLink}}" width="250" height="250" alt="Album cover for {{Album.title}}" />
         </div>
         <div class="col-md-9">
             <p>Price: {{Album.price | price}}</p>

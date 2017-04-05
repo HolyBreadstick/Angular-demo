@@ -21,7 +21,7 @@
             Errors: {
                 
             },
-            Endpoint: 'http://localhost:50569/',
+            Endpoint: 'http://music.baileysproject.com/',
             ArtistData: {
                 Current: {},
                 Search: [],
@@ -32,6 +32,8 @@
             }
         };
 
+        //'http://localhost:50569/'
+        //'http://music.baileysproject.com/'
 
 
         //Run time checks for settings
@@ -49,7 +51,7 @@
         //Navigation functions
 
         State.Navigate = function (path, id) {
-            $rootScope.$broadcast("CancelSearch", null);
+            
             if (id != undefined | id != null) {
                 $location.path(path + "/" + id)
             } else if (path != undefined | path != null) {
