@@ -173,13 +173,21 @@ namespace Angular_Demo_Complete.Controllers
                     discount = song.discount,
                     onSale = song.onSale,
                     storedPrice = song.storedPrice,
-                    title = song.title
+                    title = song.title,
+                    YoutubeLink = song.YoutubeLink
                 }).ToList(),
                 ArtistName = search.Owner.firstName,
                 imageLink = search.imageLink,
                 views = search.views
             }).SingleOrDefault();
-            
+
+            for (int i = 0; i < data.Songs.Count; i++) {
+                var temp = data.Songs[i];
+
+                if (String.IsNullOrEmpty(temp.YoutubeLink)) {
+                    data.Songs[i].YoutubeLink = SearchYoutube(data.Songs[i].ID);
+                }
+            }
 
             var increaseNum = (from search in db.Albums where search.ID == Album select search).SingleOrDefault();
 
@@ -190,6 +198,54 @@ namespace Angular_Demo_Complete.Controllers
             //System.Threading.Thread.Sleep(Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds));
 
             return data;
+        }
+
+        [Route("Song/Youtube")]
+        public String SearchYoutube(int Id) {
+
+            var song = (from data in db.Songs where data.ID == Id select data).SingleOrDefault();
+
+            if (song != null)
+            {
+                if (!String.IsNullOrEmpty(song.YoutubeLink))
+                    return song.YoutubeLink;
+                else
+                {
+                    var link = SearchYoutube(song.title, song.Owner.Owner.firstName);
+
+                    song.YoutubeLink = link;
+
+                    db.SaveChanges();
+
+                    return link;
+
+                }
+            }
+            else {
+                return "";
+            }
+
+        }
+
+
+        private String SearchYoutube(String SongName, String ArtistName) {
+            var client = new WebClient();
+            client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
+            var Params = "&type=video&videoCatergoryId=10&key=AIzaSyBDg51nViqZI8iupXHPg1v2ODyORtIVYF8&q={0}";
+
+            var completeLink = client.BaseAddress + String.Format(Params, SongName + "by " + ArtistName);
+
+            var respone = client.DownloadString(completeLink);
+
+            var result = JsonConvert.DeserializeObject<YoutubeSongSearch>(respone);
+
+            if (result.items != null & result.items.Length != 0 & !string.IsNullOrEmpty(result.items[0].id.videoId))
+            {
+                return result.items[0].id.videoId;
+            }
+            else {
+                return "";
+            }
         }
 
         private void AddAlbum(Entities.Artist Artist, Models.ArtistSearch.Album[] Albums) {
@@ -244,7 +300,7 @@ namespace Angular_Demo_Complete.Controllers
                     onSale = rn.Next(0, 100) < 25,
                     storedPrice = 1.29
                 };
-
+                newSong.YoutubeLink = SearchYoutube(s.name, Album.Owner.firstName);
                 Album.Songs.Add(newSong);
             }
 
