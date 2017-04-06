@@ -30,7 +30,7 @@
                 method: "POST"
             }).then(function (success) {
                 SessionState.ArtistData.All.push(success.data);
-                if (SessionState.ArtistData.All.length < 25) {
+                if ($scope.Searchables.length != 0) {
                     $timeout($scope.AlbumSearch, 500);
                 }
             });

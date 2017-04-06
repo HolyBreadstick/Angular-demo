@@ -32,8 +32,11 @@ namespace Angular_Demo_Complete.Controllers
         [Route("All")]
         public object GetAllArtistID()
         {
-            var info = (from data in db.Albums orderby data.ID select data.ID);
-            return info.Skip(new Random().Next(info.Count()-25)).ToList();
+            
+            var ranArt = (from user in db.Albums orderby Guid.NewGuid() select user.ID).Take(db.Albums.Count() >= 25 ? 25 : db.Albums.Count());
+            var info = (from data in db.Albums orderby data.ID where ranArt.Contains(data.ID) select data.ID);
+
+            return info;
         }
 
         [Route("RefreshAll")]
@@ -87,43 +90,48 @@ namespace Angular_Demo_Complete.Controllers
 
 
         }
+
         [Route("Add")]
         public object AddArtist(String Artist)
         {
-            var Art = new Entities.Artist();
-            if (Artist.Contains(","))
+            //Need to verify that artist doesn't already exist
+            var searchInner = (from data in db.Artist where data.firstName.Contains(Artist) select data).ToList().Count();
+
+            if (searchInner != 0)
             {
-                var allArtist = Artist.Split(',');
-                foreach (var art in allArtist)
-                {
-                    AddArtist(art.Trim());
-                }
+                return null;
             }
             else {
-                //Need to make call to get the artist data
-                var rawData = client.DownloadString(String.Format(baseUrl + "?method=artist.gettopalbums&artist={0}&api_key={1}&format=json", Artist, apiKey));
-
-                var ArtistSearch = JsonConvert.DeserializeObject<ArtistTopAlbums>(rawData);
-                
-                if (ArtistSearch != null && ArtistSearch.topalbums != null)
-                {
-                    //Need to verify that artist doesn't already exist
-                    var searchInner = (from data in db.Artist where data.firstName.Contains(ArtistSearch.topalbums.attr.artist) select data).ToList();
-                    if (searchInner.Count == 0)
+                    var Art = new Entities.Artist();
+                    if (Artist.Contains(","))
                     {
-                        Art.firstName = ArtistSearch.topalbums.attr.artist;
-                        if (ArtistSearch.topalbums.album.Length != 0)
+                        var allArtist = Artist.Split(',');
+                        foreach (var art in allArtist)
                         {
-                            AddAlbum(Art, ArtistSearch.topalbums.album);
-                            db.Artist.Add(Art);
-                            db.SaveChanges(); 
+                            AddArtist(art.Trim());
                         }
-                    } 
-                }
+                    }
+                    else
+                    {
+                        //Need to make call to get the artist data
+                        var rawData = client.DownloadString(String.Format(baseUrl + "?method=artist.gettopalbums&artist={0}&api_key={1}&format=json", Artist, apiKey));
 
-                
+                        var ArtistSearch = JsonConvert.DeserializeObject<ArtistTopAlbums>(rawData);
+
+                        if (ArtistSearch != null && ArtistSearch.topalbums != null) {
+                           Art.firstName = ArtistSearch.topalbums.attr.artist;
+                        
+                            if (ArtistSearch.topalbums.album.Length != 0)
+                            {
+                                db.Artist.Add(Art);
+                                db.SaveChanges();
+                                AddAlbum(Art.ID, ArtistSearch.topalbums.album);
+                            }
+                        }
+                    }
+
+                return Art;
             }
-            return Art;
 
         }
 
@@ -254,7 +262,7 @@ namespace Angular_Demo_Complete.Controllers
             }
         }
 
-        private void AddAlbum(Entities.Artist Artist, Models.ArtistSearch.Album[] Albums) {
+        private void AddAlbum(int ArtID, Models.ArtistSearch.Album[] Albums) {
 
             var maxSearch = Albums.Length;
 
@@ -265,49 +273,59 @@ namespace Angular_Demo_Complete.Controllers
             for (int i = 0; i < maxSearch; i++) {
                 try
                 {
-                    //Use LastFM api to go get the songs in this album
-                    var rawData = client.DownloadString(String.Format(baseUrl + "?method=album.getinfo&api_key={0}&artist={1}&album={2}&format=json", apiKey, Artist.firstName, Albums[i].name));
-                    var AlbumSearch = JsonConvert.DeserializeObject<AlbumGetInfo>(rawData);
+
+                    using (var db = new MusicContext()) {
+
+                        var Artist = (from data in db.Artist where data.ID == ArtID select data).SingleOrDefault();
+
+                        //Use LastFM api to go get the songs in this album
+                        var rawData = client.DownloadString(String.Format(baseUrl + "?method=album.getinfo&api_key={0}&artist={1}&album={2}&format=json", apiKey, Artist.firstName, Albums[i].name));
+                        var AlbumSearch = JsonConvert.DeserializeObject<AlbumGetInfo>(rawData);
 
 
-                    if (AlbumSearch.album != null && !String.IsNullOrEmpty(Albums[i].image[Albums[i].image.Length - 1].text))
-                    {
-                        var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text)
+                        if (AlbumSearch.album != null && !String.IsNullOrEmpty(Albums[i].image[Albums[i].image.Length - 1].text) && AlbumSearch.album.tracks.track.Length != 0)
                         {
-                            title = AlbumSearch.album.name,
-                            views = int.Parse(AlbumSearch.album.playcount),
-                            imageLink = Albums[i].image[Albums[i].image.Length - 1].text
-                        };
-                        if (AlbumSearch.album.tracks.track.Length != 0)
-                        {
-                            AddSongs(workingAlbum, AlbumSearch.album.tracks.track);
+                            var workingAlbum = new Entities.Album(Albums[i].image[Albums[i].image.Length - 1].text)
+                            {
+                                title = AlbumSearch.album.name,
+                                views = int.Parse(AlbumSearch.album.playcount),
+                                imageLink = Albums[i].image[Albums[i].image.Length - 1].text
+                            };
                             Artist.Albums.Add(workingAlbum);
+                            db.SaveChanges();
+                            AddSongs(workingAlbum.ID, AlbumSearch.album.tracks.track);
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    
+
                 }
 
             }
 
         }
 
-        private void AddSongs(Entities.Album Album, Models.Track[] Songs) {
+        private void AddSongs(int AlbId, Models.Track[] Songs) {
 
-            Random rn = new Random();
+            using (var db = new MusicContext()) {
 
-            foreach (var s in Songs)
-            {
-                var newSong = new Entities.Song() {
-                    title = s.name,
-                    discount = rn.NextDouble(),
-                    onSale = rn.Next(0, 100) < 25,
-                    storedPrice = 1.29
-                };
-                newSong.YoutubeLink = SearchYoutube(s.name, Album.Owner.firstName);
-                Album.Songs.Add(newSong);
+                var Album = (from data in db.Albums where data.ID == AlbId select data).SingleOrDefault();
+                Random rn = new Random();
+
+                foreach (var s in Songs)
+                {
+                    var newSong = new Entities.Song()
+                    {
+                        title = s.name,
+                        discount = rn.NextDouble(),
+                        onSale = rn.Next(0, 100) < 25,
+                        storedPrice = 1.29
+                    };
+                    newSong.YoutubeLink = SearchYoutube(s.name, s.artist.name);
+                    Album.Songs.Add(newSong);
+                    db.SaveChanges();
+                }
             }
 
         }
