@@ -26,11 +26,11 @@
         //I prefer to see the actual route and what template and controller it has
         $routeProvider
             .when('/', {
-                templateUrl: 'Pages/home.html?Version=1.6', //Why a query string? This way we can force browser to download new 'versions' as we make big changes
+                templateUrl: 'Pages/home.html?Version=1.8', //Why a query string? This way we can force browser to download new 'versions' as we make big changes
                 controller: 'home_controller'
             })
             .when('/album/:id/', {
-                templateUrl: 'Pages/AlbumSearch.html?Version=1.6',
+                templateUrl: 'Pages/AlbumSearch.html?Version=1.8',
                 controller: 'album_controller'
             });
     });
