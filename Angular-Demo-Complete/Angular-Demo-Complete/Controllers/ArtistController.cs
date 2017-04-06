@@ -233,15 +233,21 @@ namespace Angular_Demo_Complete.Controllers
             client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
             var Params = "&type=video&videoCatergoryId=10&key=AIzaSyBDg51nViqZI8iupXHPg1v2ODyORtIVYF8&q={0}";
 
-            var completeLink = client.BaseAddress + String.Format(Params, SongName + "by " + ArtistName);
+            var completeLink = client.BaseAddress + String.Format(Params, SongName + " by " + ArtistName);
 
             var respone = client.DownloadString(completeLink);
 
             var result = JsonConvert.DeserializeObject<YoutubeSongSearch>(respone);
 
-            if (result.items != null & result.items.Length != 0 & !string.IsNullOrEmpty(result.items[0].id.videoId))
+            if (result.items != null & result.items.Length != 0)
             {
-                return result.items[0].id.videoId;
+                if (!string.IsNullOrEmpty(result.items[0].id.videoId))
+                {
+                    return result.items[0].id.videoId;
+                }
+                else {
+                    return "";
+                }
             }
             else {
                 return "";
