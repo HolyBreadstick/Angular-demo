@@ -59,6 +59,9 @@ namespace Angular_Demo_Complete.Controllers
                 RemoveArtist(art);
             }
 
+            var rogueLinks = (from data in db.YoutubeLinks where data.Owner == null select data);
+            db.YoutubeLinks.RemoveRange(rogueLinks);
+
             var rogueSongs = (from data in db.Songs where data.Owner == null select data);
             db.Songs.RemoveRange(rogueSongs);
 
@@ -69,6 +72,7 @@ namespace Angular_Demo_Complete.Controllers
             foreach (var art in allArtistNames) {
                 AddArtist(art);
             }
+
             db.SaveChanges();
             timer.Stop();
             return new {
@@ -82,6 +86,9 @@ namespace Angular_Demo_Complete.Controllers
             var artist = (from data in db.Artist where data.firstName == Artist select data).First();
 
             foreach (var alb in artist.Albums) {
+                foreach (var songs in alb.Songs) {
+                    songs.YoutubeLinks.RemoveRange(0, songs.YoutubeLinks.Count);
+                }
                 alb.Songs.RemoveRange(0, alb.Songs.Count);
             }
             artist.Albums.RemoveRange(0, artist.Albums.Count);
@@ -223,7 +230,9 @@ namespace Angular_Demo_Complete.Controllers
                             imageLink = search.imageLink,
                             views = search.views
                         }).SingleOrDefault();
-                data.Songs.Clear();
+                if (data != null) {
+                    data.Songs.Clear();
+                }
             }
 
             if (data != null && data.Songs != null) {
