@@ -17,6 +17,10 @@ namespace Angular_Demo_Complete.Entities
         public String title { get; set; }
 
         public double storedPrice { get; set; } = 1.29;
+        
+        public bool onSale { get; set; } = false;
+
+        public String YoutubeLink { get; set; }
 
         [NotMapped]
         public double price
@@ -30,12 +34,7 @@ namespace Angular_Demo_Complete.Entities
                 this.price = value;
             }
         }
-
         
-
-        public bool onSale { get; set; } = false;
-
-
         [Range(0.0,1.0)]
         public double discount { get; set; } = 0.0;
 
@@ -81,5 +80,7 @@ namespace Angular_Demo_Complete.Entities
             else
                 return String.Format("{0:$##,###,###,##0.00}", p);
         }
+        
+
     }
 }

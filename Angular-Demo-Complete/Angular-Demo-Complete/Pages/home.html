@@ -41,7 +41,7 @@
         </div>
         <loader ng-show="State.Session.Loading"></loader>
         <div ng-if="!State.ArtistData.MusicSearch">
-            <music-Display ng-repeat="albums in State.ArtistData.All | orderBy: 'price'" data="albums"></music-Display>
+            <music-Display ng-repeat="albums in State.ArtistData.All" data="albums"></music-Display>
         </div>
     </div>
 

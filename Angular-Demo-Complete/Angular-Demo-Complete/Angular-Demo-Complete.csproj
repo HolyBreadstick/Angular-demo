@@ -97,6 +97,7 @@
     <Content Include="Content\select.css" />
     <Content Include="Content\select.min.css" />
     <Content Include="Content\ui-bootstrap-csp.css" />
+    <Content Include="SQL Server Scripts\Delete All.sql" />
     <Content Include="Global.asax" />
     <Content Include="Images\Original\AlbumBackground.jpg" />
     <Content Include="Images\Production\AlbumBackground.min.jpg" />
@@ -179,63 +180,68 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Content Include="Migrations\201703161902377_Initial.cs">
+    <Compile Include="Migrations\201703161902377_Initial.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Migrations\201703161902377_Initial.Designer.cs">
       <DependentUpon>201703161902377_Initial.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Migrations\201703161927458_Price-Worker.cs">
+    <Compile Include="Migrations\201703161927458_Price-Worker.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Migrations\201703161927458_Price-Worker.Designer.cs">
       <DependentUpon>201703161927458_Price-Worker.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Migrations\201703161940335_Picture-Worker.cs">
+    <Compile Include="Migrations\201703161940335_Picture-Worker.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Migrations\201703161940335_Picture-Worker.Designer.cs">
       <DependentUpon>201703161940335_Picture-Worker.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Migrations\201703161953140_Picture-Worker-Fix.cs">
+    <Compile Include="Migrations\201703161953140_Picture-Worker-Fix.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Migrations\201703161953140_Picture-Worker-Fix.Designer.cs">
       <DependentUpon>201703161953140_Picture-Worker-Fix.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Migrations\201703190139255_Cleanup-Length.cs">
+    <Compile Include="Migrations\201703190139255_Cleanup-Length.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Migrations\201703190139255_Cleanup-Length.Designer.cs">
       <DependentUpon>201703190139255_Cleanup-Length.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Migrations\201704042219463_ArtistAddDate.cs">
+    <Compile Include="Migrations\201704042219463_ArtistAddDate.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Migrations\201704042219463_ArtistAddDate.Designer.cs">
       <DependentUpon>201704042219463_ArtistAddDate.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Migrations\201704050258232_SmootherImageLoading.cs">
+    <Compile Include="Migrations\201704050258232_SmootherImageLoading.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Migrations\201704050258232_SmootherImageLoading.Designer.cs">
       <DependentUpon>201704050258232_SmootherImageLoading.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Content Include="Migrations\Configuration.cs">
+    <Compile Include="Migrations\201704061612053_YoutubeLink.cs" />
+    <Compile Include="Migrations\201704061612053_YoutubeLink.Designer.cs">
+      <DependentUpon>201704061612053_YoutubeLink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </Compile>
     <Compile Include="Models\AlbumGetInfo.cs" />
     <Compile Include="Models\ArtistTopAlbums.cs" />
     <Compile Include="Models\FastAlbumSearch.cs" />
     <Compile Include="Models\FastArtistSearch.cs" />
     <Compile Include="Models\FastSongSearch.cs" />
+    <Compile Include="Models\YoutubeSongSearch.cs" />
     <Compile Include="MusicContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -284,6 +290,9 @@
     <EmbeddedResource Include="Migrations\201704050258232_SmootherImageLoading.resx">
       <DependentUpon>201704050258232_SmootherImageLoading.cs</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704061612053_YoutubeLink.resx">
+      <DependentUpon>201704061612053_YoutubeLink.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -5,9 +5,9 @@
         .module('Routing_Main')
         .directive('song', song);
 
-    song.$inject = ['$window', 'SessionState'];
+    song.$inject = ['$window', 'SessionState' ,'$sce'];
 
-    function song($window, SessionState) {
+    function song($window, SessionState, $sce) {
         // Usage:
         //     <musicDisplay></musicDisplay>
         // Creates:
@@ -21,7 +21,8 @@
             replace: false,
             restrict: "E",
             link: function ($scope, elements, attrs) {
-
+                
+                $scope.CompleteLink = $sce.trustAsResourceUrl('https://www.youtube.com/embed/' + $scope.data.YoutubeLink + '/');
             }
         };
 

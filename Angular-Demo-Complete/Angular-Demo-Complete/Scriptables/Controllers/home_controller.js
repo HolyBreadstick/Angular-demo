@@ -18,7 +18,9 @@
                 url: SessionState.Endpoint + "api/Artist/All"
             }).then(function (success) {
                 $scope.Searchables = success.data;
-                $scope.AlbumSearch();
+                if ($scope.Searchables.length != 0) {
+                    $scope.AlbumSearch();
+                }
                 });
         };
         
@@ -26,11 +28,11 @@
 
         $scope.AlbumSearch = function () {
             return $http({
-                url: SessionState.Endpoint + "api/Artist/Album/Search?Album=" + $scope.Searchables.shift(),
+                url: SessionState.Endpoint + "api/Artist/Album/Search?Album=" + $scope.Searchables.shift() + "&includeSongs=false",
                 method: "POST"
             }).then(function (success) {
                 SessionState.ArtistData.All.push(success.data);
-                if (SessionState.ArtistData.All.length < 25) {
+                if ($scope.Searchables.length != 0) {
                     $timeout($scope.AlbumSearch, 500);
                 }
             });
