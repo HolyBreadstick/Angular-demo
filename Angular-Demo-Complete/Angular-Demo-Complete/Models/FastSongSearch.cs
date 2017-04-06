@@ -13,7 +13,7 @@ namespace Angular_Demo_Complete.Models
 
         public double storedPrice { get; set; } = 1.29;
         
-        public String YoutubeLink { get; set; }
+        public List<FastYoutubeLink> YoutubeLink { get; set; }
 
         public double price
         {

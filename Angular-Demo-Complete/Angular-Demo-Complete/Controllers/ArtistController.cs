@@ -190,7 +190,9 @@ namespace Angular_Demo_Complete.Controllers
                                 onSale = song.onSale,
                                 storedPrice = song.storedPrice,
                                 title = song.title,
-                                YoutubeLink = song.YoutubeLink
+                                YoutubeLink = (from link in song.YoutubeLinks select new FastYoutubeLink() {
+                                    Link = link.Link
+                                }).ToList()
                             }).ToList(),
                             ArtistName = search.Owner.firstName,
                             imageLink = search.imageLink,
@@ -211,7 +213,11 @@ namespace Angular_Demo_Complete.Controllers
                                 onSale = song.onSale,
                                 storedPrice = song.storedPrice,
                                 title = song.title,
-                                YoutubeLink = song.YoutubeLink
+                                YoutubeLink = (from link in song.YoutubeLinks
+                                               select new FastYoutubeLink()
+                                               {
+                                                   Link = link.Link
+                                               }).ToList()
                             }).ToList(),
                             ArtistName = search.Owner.firstName,
                             imageLink = search.imageLink,
@@ -225,9 +231,19 @@ namespace Angular_Demo_Complete.Controllers
                 {
                     var temp = data.Songs[i];
 
-                    if (String.IsNullOrEmpty(temp.YoutubeLink))
+                    if (temp.YoutubeLink.Count() == 0)
                     {
-                        data.Songs[i].YoutubeLink = SearchYoutube(data.Songs[i].ID);
+                        var list = SearchYoutube(data.Songs[i].ID);
+
+                        var tmp = new List<FastYoutubeLink>();
+
+                        foreach (var x in list) {
+                            tmp.Add(new FastYoutubeLink() {
+                                Link = x.Link
+                            });
+                        }
+
+                        data.Songs[i].YoutubeLink = tmp;
                     }
                 }
 
@@ -245,34 +261,37 @@ namespace Angular_Demo_Complete.Controllers
         }
 
         [Route("Song/Youtube")]
-        public String SearchYoutube(int Id) {
+        public List<Entities.YoutubeLink> SearchYoutube(int Id) {
 
             var song = (from data in db.Songs where data.ID == Id select data).SingleOrDefault();
 
             if (song != null)
             {
-                if (!String.IsNullOrEmpty(song.YoutubeLink))
-                    return song.YoutubeLink;
+                if (song.YoutubeLinks.Count() != 0)
+                    return null;
                 else
                 {
                     var link = SearchYoutube(song.title, song.Owner.Owner.firstName);
 
-                    song.YoutubeLink = link;
-
+                    foreach (var i in link) {
+                        song.YoutubeLinks.Add(new Entities.YoutubeLink() {
+                            Link = i
+                        });
+                    }
+                    
                     db.SaveChanges();
 
-                    return link;
+                    return song.YoutubeLinks;
 
                 }
             }
             else {
-                return "";
+                return new List<Entities.YoutubeLink>();
             }
 
         }
-
-
-        private String SearchYoutube(String SongName, String ArtistName) {
+        
+        private List<String> SearchYoutube(String SongName, String ArtistName) {
             var client = new WebClient();
             client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
             var Params = "&type=video&videoCatergoryId=10&key=AIzaSyBDg51nViqZI8iupXHPg1v2ODyORtIVYF8&q={0}";
@@ -285,16 +304,16 @@ namespace Angular_Demo_Complete.Controllers
 
             if (result.items != null & result.items.Length != 0)
             {
-                if (!string.IsNullOrEmpty(result.items[0].id.videoId))
-                {
-                    return result.items[0].id.videoId;
+                var temp = new List<String>();
+
+                foreach (var i in result.items.Take(result.items.Length < 10 ? result.items.Length : 10)) {
+                    temp.Add(i.id.videoId);
                 }
-                else {
-                    return "";
-                }
+
+                return temp;
             }
             else {
-                return "";
+                return new List<string>();
             }
         }
 
@@ -358,7 +377,17 @@ namespace Angular_Demo_Complete.Controllers
                         onSale = rn.Next(0, 100) < 25,
                         storedPrice = 1.29
                     };
-                    newSong.YoutubeLink = SearchYoutube(s.name, s.artist.name);
+
+                    var link = SearchYoutube(s.name, s.artist.name);
+
+                    foreach (var i in link)
+                    {
+                        newSong.YoutubeLinks.Add(new Entities.YoutubeLink()
+                        {
+                            Link = i
+                        });
+                    }
+                    
                     Album.Songs.Add(newSong);
                     db.SaveChanges();
                 }
