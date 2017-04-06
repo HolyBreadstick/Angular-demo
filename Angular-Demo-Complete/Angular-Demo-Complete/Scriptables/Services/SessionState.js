@@ -21,7 +21,7 @@
             Errors: {
                 
             },
-            Endpoint: 'http://localhost:50569/',
+            Endpoint: 'http://music.baileysproject.com/',
             ArtistData: {
                 Current: {},
                 Search: [],
