@@ -172,38 +172,74 @@ namespace Angular_Demo_Complete.Controllers
         }
 
         [Route("Album/Search")]
-        public object SearchAlbum(int Album) {
-            var data = (from search in db.Albums where search.ID == Album select new FastAlbumSearch() {
-                ID = search.ID,
-                title = search.title,
-                Songs = search.Songs.Select(song=> new FastSongSearch() {
-                    ID = song.ID,
-                    discount = song.discount,
-                    onSale = song.onSale,
-                    storedPrice = song.storedPrice,
-                    title = song.title,
-                    YoutubeLink = song.YoutubeLink
-                }).ToList(),
-                ArtistName = search.Owner.firstName,
-                imageLink = search.imageLink,
-                views = search.views
-            }).SingleOrDefault();
+        public object SearchAlbum(int Album, bool includeSongs = true) {
 
-            for (int i = 0; i < data.Songs.Count; i++) {
-                var temp = data.Songs[i];
-
-                if (String.IsNullOrEmpty(temp.YoutubeLink)) {
-                    data.Songs[i].YoutubeLink = SearchYoutube(data.Songs[i].ID);
-                }
+            var data = new FastAlbumSearch();
+            if (includeSongs)
+            {
+                data = (from search in db.Albums
+                        where search.ID == Album
+                        select new FastAlbumSearch()
+                        {
+                            ID = search.ID,
+                            title = search.title,
+                            Songs = search.Songs.Select(song => new FastSongSearch()
+                            {
+                                ID = song.ID,
+                                discount = song.discount,
+                                onSale = song.onSale,
+                                storedPrice = song.storedPrice,
+                                title = song.title,
+                                YoutubeLink = song.YoutubeLink
+                            }).ToList(),
+                            ArtistName = search.Owner.firstName,
+                            imageLink = search.imageLink,
+                            views = search.views
+                        }).SingleOrDefault();
+            }
+            else {
+                data = (from search in db.Albums
+                        where search.ID == Album
+                        select new FastAlbumSearch()
+                        {
+                            ID = search.ID,
+                            title = search.title,
+                            Songs = search.Songs.Select(song => new FastSongSearch()
+                            {
+                                ID = song.ID,
+                                discount = song.discount,
+                                onSale = song.onSale,
+                                storedPrice = song.storedPrice,
+                                title = song.title,
+                                YoutubeLink = song.YoutubeLink
+                            }).ToList(),
+                            ArtistName = search.Owner.firstName,
+                            imageLink = search.imageLink,
+                            views = search.views
+                        }).SingleOrDefault();
+                data.Songs.Clear();
             }
 
-            var increaseNum = (from search in db.Albums where search.ID == Album select search).SingleOrDefault();
+            if (data != null && data.Songs != null) {
+                for (int i = 0; i < data.Songs.Count; i++)
+                {
+                    var temp = data.Songs[i];
 
-            increaseNum.views += 1;
+                    if (String.IsNullOrEmpty(temp.YoutubeLink))
+                    {
+                        data.Songs[i].YoutubeLink = SearchYoutube(data.Songs[i].ID);
+                    }
+                }
 
-            db.SaveChanges();
+                var increaseNum = (from search in db.Albums where search.ID == Album select search).SingleOrDefault();
+
+                increaseNum.views += 1;
+
+                db.SaveChanges();
+            }
 
             //System.Threading.Thread.Sleep(Convert.ToInt32(TimeSpan.FromSeconds(5).TotalMilliseconds));
+            
 
             return data;
         }

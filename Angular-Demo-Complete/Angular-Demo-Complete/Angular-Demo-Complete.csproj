@@ -97,6 +97,7 @@
     <Content Include="Content\select.css" />
     <Content Include="Content\select.min.css" />
     <Content Include="Content\ui-bootstrap-csp.css" />
+    <Content Include="SQL Server Scripts\Delete All.sql" />
     <Content Include="Global.asax" />
     <Content Include="Images\Original\AlbumBackground.jpg" />
     <Content Include="Images\Production\AlbumBackground.min.jpg" />
