@@ -13,5 +13,5 @@
             <p class="text-right">Price: {{data.price | price}}</p>
         </div>
     </div>
-    <div id="{{data.ID}}"></div>
+    <youtube-video ng-if="show" video-id="data.YoutubeLink[0].Link"></youtube-video>
 </div>

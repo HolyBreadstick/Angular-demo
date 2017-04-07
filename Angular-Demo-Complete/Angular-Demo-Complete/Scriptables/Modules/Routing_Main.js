@@ -9,9 +9,9 @@
         'ngRoute',
         // Custom modules 
         'Controllers',
-        'Filters'
+        'Filters',
         // 3rd Party Modules
-
+        'youtube-embed'
     ]);
 
     //The config method accepts a function
