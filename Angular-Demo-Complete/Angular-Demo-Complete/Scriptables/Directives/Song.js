@@ -14,7 +14,7 @@
         // 
 
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/Song/Song.html?Version=1.9",
+            templateUrl: "/Pages/Templates/Directives/Song/Song.html?Version=1.10",
             scope: {
                 data: "="
             },
@@ -22,7 +22,7 @@
             restrict: "E",
             link: function ($scope, elements, attrs) {
                 
-                $scope.CompleteLink = $sce.trustAsResourceUrl('https://www.youtube.com/embed/' + $scope.data.YoutubeLink + '/');
+                $scope.CompleteLink = $sce.trustAsResourceUrl('https://www.youtube.com/embed/' + $scope.data.YoutubeLink[0].Link + '/');
             }
         };
 

@@ -1,5 +1,8 @@
 ﻿use MusicDemo;
 
+delete from YoutubeLinks
+where 1+1=2;
+
 delete from Songs
 where 1+1=2;
 

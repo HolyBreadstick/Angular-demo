@@ -177,6 +177,7 @@
     <Compile Include="Entities\Album.cs" />
     <Compile Include="Entities\Artist.cs" />
     <Compile Include="Entities\Song.cs" />
+    <Compile Include="Entities\YoutubeLink.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -233,6 +234,18 @@
     <Compile Include="Migrations\201704061612053_YoutubeLink.Designer.cs">
       <DependentUpon>201704061612053_YoutubeLink.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201704062309287_YoutubeMultiLink.cs" />
+    <Compile Include="Migrations\201704062309287_YoutubeMultiLink.Designer.cs">
+      <DependentUpon>201704062309287_YoutubeMultiLink.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704062310107_YoutubeMultiLinkFix.cs" />
+    <Compile Include="Migrations\201704062310107_YoutubeMultiLinkFix.Designer.cs">
+      <DependentUpon>201704062310107_YoutubeMultiLinkFix.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201704062332556_YoutubeMultiLinkFix3.cs" />
+    <Compile Include="Migrations\201704062332556_YoutubeMultiLinkFix3.Designer.cs">
+      <DependentUpon>201704062332556_YoutubeMultiLinkFix3.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
@@ -241,6 +254,7 @@
     <Compile Include="Models\FastAlbumSearch.cs" />
     <Compile Include="Models\FastArtistSearch.cs" />
     <Compile Include="Models\FastSongSearch.cs" />
+    <Compile Include="Models\FastYoutubeLink.cs" />
     <Compile Include="Models\YoutubeSongSearch.cs" />
     <Compile Include="MusicContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -293,6 +307,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201704061612053_YoutubeLink.resx">
       <DependentUpon>201704061612053_YoutubeLink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704062309287_YoutubeMultiLink.resx">
+      <DependentUpon>201704062309287_YoutubeMultiLink.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704062310107_YoutubeMultiLinkFix.resx">
+      <DependentUpon>201704062310107_YoutubeMultiLinkFix.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201704062332556_YoutubeMultiLinkFix3.resx">
+      <DependentUpon>201704062332556_YoutubeMultiLinkFix3.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
