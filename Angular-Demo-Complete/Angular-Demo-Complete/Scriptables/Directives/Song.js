@@ -21,8 +21,16 @@
             replace: false,
             restrict: "E",
             link: function ($scope, elements, attrs) {
-                
                 $scope.CompleteLink = $sce.trustAsResourceUrl('https://www.youtube.com/embed/' + $scope.data.YoutubeLink[0].Link + '/');
+                $scope.show = false;
+
+                $scope.ToggleVideo = function () {
+                    if ($scope.show == true) {
+                        $scope.show = false;
+                    } else {
+                        $scope.show = true;
+                    }
+                };
             }
         };
 
