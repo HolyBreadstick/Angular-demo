@@ -14,7 +14,7 @@
         // 
 
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/YoutubeVideo/YoutubeVideo.html?Version=1.13",
+            templateUrl: "/Pages/Templates/Directives/YoutubeVideo/YoutubeVideo.html?Version=1.14",
             replace: false,
             restrict: "E",
             scope: {
@@ -22,23 +22,12 @@
                 data: "="
             },
             link: function ($scope, element, attrs) {
+                
                 $scope.CompleteLink = $sce.trustAsResourceUrl('https://www.youtube.com/embed/' + $scope.data.YoutubeLink[0].Link + '/');
                 //$scope.Width = 100;
-
-                $scope.Width = document.getElementsByClassName('song-item')[0].offsetWidth;
                 
-                console.log(document.getElementsByClassName('song-item')[0].offsetWidth);
-
-                angular.element($window).bind('resize', function () {
-                    $scope.Width = document.getElementsByClassName('song-item')[0].offsetWidth;
-                    $scope.$digest();
-                });
-
             }
-        };
-
-
-
+        }
         return directive;
     }
 

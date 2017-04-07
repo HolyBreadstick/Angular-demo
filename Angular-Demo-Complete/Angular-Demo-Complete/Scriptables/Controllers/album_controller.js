@@ -5,9 +5,9 @@
         .module('Controllers')
         .controller('album_controller', album_controller);
 
-    album_controller.$inject = ['$scope', '$routeParams','SessionState', '$http'];
+    album_controller.$inject = ['$scope', '$routeParams','SessionState', '$http', '$rootScope'];
 
-    function album_controller($scope, $routeParams, SessionState, $http) {
+    function album_controller($scope, $routeParams, SessionState, $http, $rootScope) {
 
         $scope.State = SessionState.getData();
 
@@ -29,7 +29,25 @@
 
         loadingFunction();
 
-        
+        $scope.CurrentSong = {
+            Index: 0,
+            Song: {}
+        };
+
+        $scope.PlayAll = function () {
+            $rootScope.$broadcast('Toggle', {
+                ID: $scope.Album.Songs[$scope.CurrentSong.Index].ID
+            });
+            $scope.CurrentSong.Song = $scope.Album.Songs[$scope.CurrentSong.Index];
+        };
+
+        $rootScope.$on('SongEnded', function (event, data) {
+            $scope.CurrentSong.Index += 1;
+            $rootScope.$broadcast('Toggle', {
+                ID: $scope.Album.Songs[$scope.CurrentSong.Index].ID
+            });
+            $scope.CurrentSong.Song = $scope.Album.Songs[$scope.CurrentSong.Index];
+        });
         
     }
 })();

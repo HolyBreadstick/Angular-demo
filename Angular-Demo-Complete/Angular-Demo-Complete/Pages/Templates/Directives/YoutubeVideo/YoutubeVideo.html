@@ -2,8 +2,9 @@
 
 <head>
     <title>YouTube Video Content</title>
+    
 </head>
 
-<div ng-if="show" class="row">
-    <iframe class="center-block" width="{{Width}}" height="{{Width * .58}}" ng-src="{{CompleteLink}}" frameborder="0" allowfullscreen></iframe>
+<div class="row">
+    <div id="player-{{data.ID}}"></div>
 </div>

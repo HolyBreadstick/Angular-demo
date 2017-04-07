@@ -14,7 +14,7 @@
         // 
 
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/Loader/Loader.html?Version=1.13",
+            templateUrl: "/Pages/Templates/Directives/Loader/Loader.html?Version=1.14",
             replace: false,
             restrict: "E",
             scope: {

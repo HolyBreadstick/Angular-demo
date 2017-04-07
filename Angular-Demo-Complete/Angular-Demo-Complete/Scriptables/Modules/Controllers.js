@@ -7,8 +7,8 @@
         'ui.bootstrap',
         // Custom modules
         'Services',
-        'Filters'
+        'Filters',
         // 3rd Party Modules
-
+        'youtube-embed'
     ]);
 })();
