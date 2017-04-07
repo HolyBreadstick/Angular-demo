@@ -5,9 +5,9 @@
         .module('Routing_Main')
         .directive('song', song);
 
-    song.$inject = ['$window', 'SessionState' ,'$sce'];
+    song.$inject = ['$window', 'SessionState' ,'$sce', '$compile'];
 
-    function song($window, SessionState, $sce) {
+    function song($window, SessionState, $sce, $compile) {
         // Usage:
         //     <musicDisplay></musicDisplay>
         // Creates:
@@ -26,8 +26,10 @@
 
                 $scope.ToggleVideo = function () {
                     if ($scope.show == true) {
+                        angular.element(document.getElementById($scope.data.ID)).replaceWith(($compile('<div id="{{data.ID}}"></div>')($scope))); 
                         $scope.show = false;
                     } else {
+                        angular.element(document.getElementById($scope.data.ID)).html(($compile('<youtube-video data="data" show="show"></youtube-video>')($scope)));
                         $scope.show = true;
                     }
                 };
