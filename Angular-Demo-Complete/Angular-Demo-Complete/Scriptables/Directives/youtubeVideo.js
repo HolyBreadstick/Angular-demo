@@ -14,7 +14,7 @@
         // 
 
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/YoutubeVideo/YoutubeVideo.html?Version=1.11",
+            templateUrl: "/Pages/Templates/Directives/YoutubeVideo/YoutubeVideo.html?Version=1.12",
             replace: false,
             restrict: "E",
             scope: {
@@ -26,7 +26,7 @@
                 //$scope.Width = 100;
 
                 $scope.Width = document.getElementsByClassName('song-item')[0].offsetWidth;
-
+                
                 console.log(document.getElementsByClassName('song-item')[0].offsetWidth);
 
                 angular.element($window).bind('resize', function () {
