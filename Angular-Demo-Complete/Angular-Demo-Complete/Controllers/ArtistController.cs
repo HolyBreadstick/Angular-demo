@@ -144,11 +144,26 @@ namespace Angular_Demo_Complete.Controllers
 
         [Route("Search")]
         public object SearchArtist(String Artist) {
-            return (from search in db.Artist where search.firstName.Contains(Artist) select new {
-                ID = search.ID,
-                AddedAt = search.AddedAt,
-                firstName = search.firstName
-            }).Take(10).ToList();
+            if (Artist == "*")
+            {
+                return (from search in db.Artist
+                        select new
+                        {
+                            ID = search.ID,
+                            AddedAt = search.AddedAt,
+                            firstName = search.firstName
+                        }).ToList();
+            }
+            else {
+                return (from search in db.Artist
+                        where search.firstName.Contains(Artist)
+                        select new
+                        {
+                            ID = search.ID,
+                            AddedAt = search.AddedAt,
+                            firstName = search.firstName
+                        }).Take(10).ToList();
+            }
         }
 
         [Route("Search/Artist")]
