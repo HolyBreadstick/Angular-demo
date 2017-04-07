@@ -20,7 +20,7 @@ namespace Angular_Demo_Complete.Entities
         
         public bool onSale { get; set; } = false;
 
-        public String YoutubeLink { get; set; }
+        public virtual List<YoutubeLink> YoutubeLinks { get; set; } = new List<YoutubeLink>();
 
         [NotMapped]
         public double price
