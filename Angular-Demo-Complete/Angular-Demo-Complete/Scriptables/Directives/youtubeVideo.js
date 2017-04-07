@@ -14,7 +14,7 @@
         // 
 
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/YoutubeVideo/YoutubeVideo.html?Version=1.10",
+            templateUrl: "/Pages/Templates/Directives/YoutubeVideo/YoutubeVideo.html?Version=1.11",
             replace: false,
             restrict: "E",
             scope: {
