@@ -10,7 +10,7 @@
             <p><span class="glyphicon glyphicon-cd"></span> {{data.title | limitTo: 100}}</p>
         </div>
         <div style="display:inline-block" class="pull-right col-xs-5 col-sm-3">
-            <p class="text-right">Price: {{data.price | price}}</p>
+            <input type="button" value="Download" ng-click="Download()" />
         </div>
     </div>
     <youtube-video ng-if="show" video-id="data.YoutubeLink[0].Link"></youtube-video>
