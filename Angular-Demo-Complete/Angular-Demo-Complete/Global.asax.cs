@@ -17,9 +17,9 @@ namespace Angular_Demo_Complete
 
             Database.SetInitializer<MusicContext>(null);
 
-            var configuration = new Migrations.Configuration();
-            var migrator = new DbMigrator(configuration);
-            migrator.Update();
+            //var configuration = new Migrations.Configuration();
+            //var migrator = new DbMigrator(configuration);
+            //migrator.Update();
         }
     }
 }
