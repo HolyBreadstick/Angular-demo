@@ -43,10 +43,12 @@
 
         $rootScope.$on('SongEnded', function (event, data) {
             $scope.CurrentSong.Index += 1;
-            $rootScope.$broadcast('Toggle', {
-                ID: $scope.Album.Songs[$scope.CurrentSong.Index].ID
-            });
-            $scope.CurrentSong.Song = $scope.Album.Songs[$scope.CurrentSong.Index];
+            if ($scope.CurrentSong.Index <= $scope.Album.Songs.length) {
+    $rootScope.$broadcast('Toggle', {
+                    ID: $scope.Album.Songs[$scope.CurrentSong.Index].ID
+                });
+                $scope.CurrentSong.Song = $scope.Album.Songs[$scope.CurrentSong.Index];
+            }
         });
         
     }
