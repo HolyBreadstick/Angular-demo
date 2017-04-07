@@ -13,8 +13,7 @@ namespace Angular_Demo_Complete
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-
-            Database.SetInitializer<MusicContext>(null);
+            
         }
     }
 }
