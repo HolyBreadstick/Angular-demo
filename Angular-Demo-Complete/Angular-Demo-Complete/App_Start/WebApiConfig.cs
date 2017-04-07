@@ -23,6 +23,9 @@ namespace Angular_Demo_Complete
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
 
             json.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+
+
         }
     }
 }
