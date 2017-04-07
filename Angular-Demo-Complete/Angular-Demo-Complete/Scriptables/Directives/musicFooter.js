@@ -13,7 +13,7 @@
         // Creates:
         // 
         return {
-            templateUrl: "/Pages/Templates/Directives/Footer/footer.html?Version=1.13"
+            templateUrl: "/Pages/Templates/Directives/Footer/footer.html?Version=1.14"
         };
     }
 
