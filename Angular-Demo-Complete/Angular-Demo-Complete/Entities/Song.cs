@@ -20,6 +20,10 @@ namespace Angular_Demo_Complete.Entities
         
         public bool onSale { get; set; } = false;
 
+        public String FilePath { get; set; }
+
+        public Boolean canDownload { get; set; }
+
         public virtual List<YoutubeLink> YoutubeLinks { get; set; } = new List<YoutubeLink>();
 
         [NotMapped]
@@ -81,6 +85,5 @@ namespace Angular_Demo_Complete.Entities
                 return String.Format("{0:$##,###,###,##0.00}", p);
         }
         
-
     }
 }

@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Angular_Demo_Complete.Models.ArtistSearch;
 using Angular_Demo_Complete.Models;
 using System.Data.Entity.SqlServer;
+using System.IO;
+using Angular_Demo_Complete.Helpers;
 
 namespace Angular_Demo_Complete.Controllers
 {
@@ -127,13 +129,14 @@ namespace Angular_Demo_Complete.Controllers
 
                         if (ArtistSearch != null && ArtistSearch.topalbums != null) {
                            Art.firstName = ArtistSearch.topalbums.attr.artist;
-                        
+                        //Need to create folder structure for the File System
                             if (ArtistSearch.topalbums.album.Length != 0)
                             {
-                                db.Artist.Add(Art);
-                                db.SaveChanges();
-                                AddAlbum(Art.ID, ArtistSearch.topalbums.album);
-                            }
+                            db.Artist.Add(Art);
+                            db.SaveChanges();
+                            AddAlbum(Art.ID, ArtistSearch.topalbums.album);
+                            FolderStructures.CreateArtistFolderStructure(Art.ID);
+                        }
                         }
                     }
 
@@ -418,6 +421,6 @@ namespace Angular_Demo_Complete.Controllers
             }
 
         }
-
+        
     }
 }
