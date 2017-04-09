@@ -48,12 +48,23 @@ namespace Angular_Demo_Complete.Controllers
             //Keeps Artist and their data if the data is not a day old.
             var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 | true==Force select data.firstName).ToList();
 
+            foreach (var name in allArtistNames) {
+                db.ArtistBackups.Add(new Entities.BackupArtists() {
+                firstName = name});
+            }
+
+            db.SaveChanges();
+
             for (int i = 0; i < allArtistNames.Count; i++) {
                 if ((from data in db.Artist where data.Albums.Count == 0 select data.firstName).ToList().Contains(allArtistNames[i])) {
                     RemoveArtist(allArtistNames[i]);
                     allArtistNames.RemoveAt(i);
+                    var name = allArtistNames[i];
+                    db.ArtistBackups.Remove((from data in db.ArtistBackups where data.firstName == name select data).Single());
                 }
             }
+
+            db.SaveChanges();
 
             foreach (var art in allArtistNames) {
                 RemoveArtist(art);
@@ -69,8 +80,9 @@ namespace Angular_Demo_Complete.Controllers
 
 
 
-            foreach (var art in allArtistNames) {
+            foreach (var art in (from data in db.ArtistBackups select data.firstName).ToList()) {
                 AddArtist(art);
+                db.ArtistBackups.Remove((from data in db.ArtistBackups where data.firstName == art select data).Single());
             }
 
             db.SaveChanges();

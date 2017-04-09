@@ -179,6 +179,7 @@
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Entities\Album.cs" />
     <Compile Include="Entities\Artist.cs" />
+    <Compile Include="Entities\BackupArtists.cs" />
     <Compile Include="Entities\Song.cs" />
     <Compile Include="Entities\YoutubeLink.cs" />
     <Compile Include="Global.asax.cs">
