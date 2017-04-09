@@ -93,12 +93,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="ArtistData\Green Day\American Idiot\American Idiot\Audio\American Idiot.mp3" />
-    <Content Include="ArtistData\Green Day\American Idiot\American Idiot\Video\American Idiot.mp4" />
-    <Content Include="ArtistData\Green Day\Dookie\Burnout\Audio\Burnout.mp3" />
-    <Content Include="ArtistData\Green Day\Dookie\Chump\Audio\Chump.mp3" />
-    <Content Include="ArtistData\Green Day\Dookie\Having a Blast\Audio\Having a Blast.mp3" />
-    <Content Include="ArtistData\Green Day\Dookie\When I Come Around\Audio\When I Come Around.mp3" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
