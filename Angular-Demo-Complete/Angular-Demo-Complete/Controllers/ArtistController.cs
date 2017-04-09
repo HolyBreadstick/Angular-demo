@@ -419,8 +419,16 @@ namespace Angular_Demo_Complete.Controllers
                 {
 
                     var ArtistRootPath = Path.Combine(RootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(artist.firstName)));
-                    //Create the top level for the artist
-                    Directory.CreateDirectory(ArtistRootPath);
+                    try
+                    {
+                        //Create the top level for the artist
+                        Directory.CreateDirectory(ArtistRootPath);
+                        SaveArtistFolderInDb(ArtistRootPath, ID);
+                    }
+                    catch (Exception)
+                    {
+                        
+                    }
 
 
                     //Create all the album folders for that artist
@@ -428,21 +436,84 @@ namespace Angular_Demo_Complete.Controllers
                     {
                         //Form the path
                         var AlbumRootPath = Path.Combine(ArtistRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(album.title)));
-                        Directory.CreateDirectory(AlbumRootPath);
+                        try
+                        {
+                            Directory.CreateDirectory(AlbumRootPath);
+                            SaveAlbumFolderInDb(AlbumRootPath, album.ID);
+                        }
+                        catch (Exception)
+                        {
+                            
+                        }
 
 
                         //Create all the song folder for that artist
                         foreach (var song in album.Songs)
                         {
-                            var SongRootPath = Path.Combine(AlbumRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(song.title)));
-                            Directory.CreateDirectory(SongRootPath);
+                            try
+                            {
+                                //Root song path
+                                var SongRootPath = Path.Combine(AlbumRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(song.title)));
+                                Directory.CreateDirectory(SongRootPath);
+                                //Path for audio files
+                                var SongSubFolderAudio = Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Audio")));
+                                Directory.CreateDirectory(SongSubFolderAudio);
+                                //Path for video files
+                                var SongSubFolderVideo = Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Video")));
+                                Directory.CreateDirectory(SongSubFolderVideo);
+                                //Update the db so the song has it's path
+                                SaveSongFolderInDb(SongRootPath, song.ID);
+                            }
+                            catch (Exception)
+                            {
+                                
+                            }
                         }
-
+                        
                     }
-                    SaveArtistFolderInDb(ArtistRootPath, ID);
+                    
+                    
+                    
                 } 
             }
 
+        }
+
+        private void SaveAlbumFolderInDb(string albumRootPath, int ID)
+        {
+            using (var db = new MusicContext()) {
+                var needsFolderInDb = (from data in db.Albums where data.ID == ID select (!(data.FilePath == null)) | (!(data.FilePath == ""))).SingleOrDefault();
+
+
+                if (needsFolderInDb) {
+                    var album = (from data in db.Albums where data.ID == ID select data).SingleOrDefault();
+
+                    if (album != null) {
+                        album.FilePath = albumRootPath;
+                        db.SaveChanges();
+                    }
+                }
+            }
+        }
+
+        private void SaveSongFolderInDb(string songRootPath, int ID)
+        {
+            using (var db = new MusicContext())
+            {
+                var needsFolderInDb = (from data in db.Songs where data.ID == ID select (!(data.FilePath == null)) | (!(data.FilePath == ""))).SingleOrDefault();
+
+
+                if (needsFolderInDb)
+                {
+                    var song = (from data in db.Songs where data.ID == ID select data).SingleOrDefault();
+
+                    if (song != null)
+                    {
+                        song.FilePath = songRootPath;
+                        db.SaveChanges();
+                    }
+                }
+            }
         }
 
         private void SaveArtistFolderInDb(String path,int ID) {
