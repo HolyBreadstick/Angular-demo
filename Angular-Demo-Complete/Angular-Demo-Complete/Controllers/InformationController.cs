@@ -48,7 +48,11 @@ namespace Angular_Demo_Complete.Controllers
                 return null;
             }
 
+#if Debug
             var downloadLink = "http://localhost:50569/" + RemoveIllegalPathCharacters.FormatForBrowser(totalPath);
+#else
+            var downloadLink = "http://music.baileysproject.com/" + RemoveIllegalPathCharacters.FormatForBrowser(totalPath);
+#endif
 
             return new
             {
