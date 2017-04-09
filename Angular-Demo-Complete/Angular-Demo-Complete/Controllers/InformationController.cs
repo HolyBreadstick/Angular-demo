@@ -57,7 +57,8 @@ namespace Angular_Demo_Complete.Controllers
             return new
             {
                 Link = downloadLink,
-                FileName = Path.GetFileName(totalPath)
+                FileName = Path.GetFileName(totalPath),
+                ConverterDownloadLink = String.Format("http://audio.online-convert.com/convert-to-mp3?external_url={0}&normalize=true", downloadLink)
             };
 
 
