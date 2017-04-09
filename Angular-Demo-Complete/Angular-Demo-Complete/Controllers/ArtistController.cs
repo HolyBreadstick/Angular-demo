@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Angular_Demo_Complete.Models.ArtistSearch;
 using Angular_Demo_Complete.Models;
 using System.Data.Entity.SqlServer;
+using System.IO;
+using Angular_Demo_Complete.Helpers;
 
 namespace Angular_Demo_Complete.Controllers
 {
@@ -127,13 +129,14 @@ namespace Angular_Demo_Complete.Controllers
 
                         if (ArtistSearch != null && ArtistSearch.topalbums != null) {
                            Art.firstName = ArtistSearch.topalbums.attr.artist;
-                        
+                        //Need to create folder structure for the File System
                             if (ArtistSearch.topalbums.album.Length != 0)
                             {
-                                db.Artist.Add(Art);
-                                db.SaveChanges();
-                                AddAlbum(Art.ID, ArtistSearch.topalbums.album);
-                            }
+                            db.Artist.Add(Art);
+                            db.SaveChanges();
+                            AddAlbum(Art.ID, ArtistSearch.topalbums.album);
+                            CreateArtistFolderStructure(Art.ID);
+                        }
                         }
                     }
 
@@ -404,5 +407,60 @@ namespace Angular_Demo_Complete.Controllers
 
         }
 
+        private void CreateArtistFolderStructure(int ID) {
+            //Need to hold a global path here
+            const String RootPath = @"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\ArtistData\";
+
+            using (var db = new MusicContext())
+            {
+                var artist = (from data in db.Artist where data.ID == ID select data).SingleOrDefault();
+
+                if (artist != null)
+                {
+
+                    var ArtistRootPath = Path.Combine(RootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(artist.firstName)));
+                    //Create the top level for the artist
+                    Directory.CreateDirectory(ArtistRootPath);
+
+
+                    //Create all the album folders for that artist
+                    foreach (var album in artist.Albums)
+                    {
+                        //Form the path
+                        var AlbumRootPath = Path.Combine(ArtistRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(album.title)));
+                        Directory.CreateDirectory(AlbumRootPath);
+
+
+                        //Create all the song folder for that artist
+                        foreach (var song in album.Songs)
+                        {
+                            var SongRootPath = Path.Combine(AlbumRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(song.title)));
+                            Directory.CreateDirectory(SongRootPath);
+                        }
+
+                    }
+                    SaveArtistFolderInDb(ArtistRootPath, ID);
+                } 
+            }
+
+        }
+
+        private void SaveArtistFolderInDb(String path,int ID) {
+            using (var db = new MusicContext())
+            {
+                var needsFolderInDb = (from data in db.Artist where data.ID == ID select (!(data.FilePath == null)) | (!(data.FilePath == ""))).SingleOrDefault();
+
+                if (needsFolderInDb)
+                {
+                    var artist = (from data in db.Artist where data.ID == ID select data).SingleOrDefault();
+
+                    if (artist != null)
+                    {
+                        artist.FilePath = path;
+                        db.SaveChanges();
+                    }
+                } 
+            }
+        }
     }
 }

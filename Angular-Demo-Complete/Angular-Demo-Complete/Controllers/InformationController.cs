@@ -28,21 +28,24 @@ namespace Angular_Demo_Complete.Controllers
         }
 
         [Route("Download")]
-        public object DownloadVideoAs(String link) {
-
-
-
-            // Our test youtube link
-            //const string link = "https://youtu.be/a1BS7XnEZqc";
-
-            /*
-             * Get the available video formats.
-             * We'll work with them in the video and audio download examples.
-             */
+        public object DownloadVideoAs(String link, Boolean wantVideo) {
+            
             IEnumerable<VideoInfo> videoInfos = DownloadUrlResolver.GetDownloadUrls(link, false);
 
             //DownloadAudio(videoInfos);
-            var totalPath = DownloadVideo(videoInfos);
+            var totalPath = "";
+
+            if (wantVideo)
+            {
+                totalPath = DownloadVideo(videoInfos);
+            }
+            else if (wantVideo == false)
+            {
+                totalPath = DownloadAudio(videoInfos);
+            }
+            else {
+                return null;
+            }
 
             return new
             {

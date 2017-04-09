@@ -18,6 +18,8 @@ namespace Angular_Demo_Complete.Entities
 
         public DateTime AddedAt { get; set; } = DateTime.UtcNow;
 
+        public String FilePath { get; set; }
+
         public virtual List<Album> Albums { get; set; } = new List<Album>();
     }
 }

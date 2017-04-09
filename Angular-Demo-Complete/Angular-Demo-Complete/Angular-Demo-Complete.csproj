@@ -184,6 +184,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\RemoveIllegalPathCharacters.cs" />
     <Compile Include="Migrations\201703161902377_Initial.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
