@@ -56,7 +56,7 @@
                 $scope.Download = function () {
                     $scope.ToggleVideo();
                     return $http({
-                        url: SessionState.Endpoint + "/api/Information/Download?link=https://www.youtube.com/watch?v=" + $scope.data.YoutubeLink[0].Link,
+                        url: SessionState.Endpoint + "/api/Information/Download?link=https://www.youtube.com/watch?v=" + $scope.data.YoutubeLink[0].Link + "&wantVideo=false",
                         method: "POST"
                     }).then(function (data) {
                         console.log(data);

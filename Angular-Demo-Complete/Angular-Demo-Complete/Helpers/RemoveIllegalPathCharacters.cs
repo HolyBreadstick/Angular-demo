@@ -15,5 +15,10 @@ namespace Angular_Demo_Complete.Helpers
             var r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
             return r.Replace(path, "");
         }
+
+        public static String FormatForBrowser(String path) {
+            var newPath = path.Substring(path.IndexOf("ArtistData"));
+            return newPath.Replace("\\", "/");
+        }
     }
 }

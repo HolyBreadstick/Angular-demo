@@ -1,4 +1,5 @@
 ﻿using Angular_Demo_Complete.Entities;
+using Angular_Demo_Complete.Helpers;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -37,19 +38,21 @@ namespace Angular_Demo_Complete.Controllers
 
             if (wantVideo)
             {
-                totalPath = DownloadVideo(videoInfos);
+                totalPath = DownloadVideo(videoInfos, link);
             }
             else if (wantVideo == false)
             {
-                totalPath = DownloadAudio(videoInfos);
+                totalPath = DownloadAudio(videoInfos, link);
             }
             else {
                 return null;
             }
 
+            var downloadLink = "http://localhost:50569/" + RemoveIllegalPathCharacters.FormatForBrowser(totalPath);
+
             return new
             {
-                Link = "http://localhost:50569/Content/" + Path.GetFileName(totalPath),
+                Link = downloadLink,
                 FileName = Path.GetFileName(totalPath)
             };
 
@@ -60,16 +63,21 @@ namespace Angular_Demo_Complete.Controllers
 
         }
 
-        private String DownloadAudio(IEnumerable<VideoInfo> videoInfos)
+        private String DownloadAudio(IEnumerable<VideoInfo> videoInfos, String Link)
         {
             /*
              * We want the first extractable video with the highest audio quality.
              */
-            VideoInfo video = videoInfos
+            VideoInfo video = null;
+            video = videoInfos
                 .Where(info => info.CanExtractAudio)
                 .OrderByDescending(info => info.AudioBitrate)
-                .First();
+                .FirstOrDefault();
 
+            if (video == null) {
+                video = videoInfos
+                .First(info => info.VideoType == VideoType.Mp4 && info.Resolution == 360);
+            }
             /*
              * If the video has a decrypted signature, decipher it
              */
@@ -83,28 +91,19 @@ namespace Angular_Demo_Complete.Controllers
              * The first argument is the video where the audio should be extracted from.
              * The second argument is the path to save the audio file.
              */
-
-            var audioDownloader = new AudioDownloader(video,
-                Path.Combine(@"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\Content\",
-                RemoveIllegalPathCharacters(video.Title) + video.AudioExtension));
-
-            // Register the progress events. We treat the download progress as 85% of the progress
-            // and the extraction progress only as 15% of the progress, because the download will
-            // take much longer than the audio extraction.
-            audioDownloader.DownloadProgressChanged += (sender, args) => Console.WriteLine(args.ProgressPercentage * 0.85);
-            audioDownloader.AudioExtractionProgressChanged += (sender, args) => Console.WriteLine(85 + args.ProgressPercentage * 0.15);
-
+            var endPath = Path.Combine(FolderStructures.FindSongFilePath(YoutubeLinkExtractor.FindVideoID(Link)), String.Format(@"{0}\", "Audio"), String.Format(@"{0}{1}", FolderStructures.GetSongName(YoutubeLinkExtractor.FindVideoID(Link)), ".mp3"));
+            var audioDownloader = new VideoDownloader(video, endPath);
+            
             /*
              * Execute the audio downloader.
              * For GUI applications note, that this method runs synchronously.
              */
             audioDownloader.Execute();
 
-            return Path.Combine(@"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\Content\",
-                RemoveIllegalPathCharacters(video.Title) + video.AudioExtension);
+            return endPath;
         }
 
-        private String DownloadVideo(IEnumerable<VideoInfo> videoInfos)
+        private String DownloadVideo(IEnumerable<VideoInfo> videoInfos, String Link)
         {
             /*
              * Select the first .mp4 video with 360p resolution
@@ -125,9 +124,8 @@ namespace Angular_Demo_Complete.Controllers
              * The first argument is the video to download.
              * The second argument is the path to save the video file.
              */
-            var videoDownloader = new VideoDownloader(video,
-                Path.Combine(@"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\Content\",
-                RemoveIllegalPathCharacters(video.Title) + ".mp3"));
+            var endPath = Path.Combine(FolderStructures.FindSongFilePath(YoutubeLinkExtractor.FindVideoID(Link)), String.Format(@"{0}\", "Video"), String.Format(@"{0}{1}", FolderStructures.GetSongName(YoutubeLinkExtractor.FindVideoID(Link)), video.VideoExtension));
+            var videoDownloader = new VideoDownloader(video, endPath);
 
 
             // Register the ProgressChanged event and print the current progress
@@ -139,16 +137,10 @@ namespace Angular_Demo_Complete.Controllers
              */
             videoDownloader.Execute();
 
-            return Path.Combine(@"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\Content\",
-                RemoveIllegalPathCharacters(video.Title) + ".mp3");
+            return endPath;
         }
 
-        private string RemoveIllegalPathCharacters(string path)
-        {
-            string regexSearch = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
-            var r = new Regex(string.Format("[{0}]", Regex.Escape(regexSearch)));
-            return r.Replace(path, "");
-        }
+        
 
     }
 }
