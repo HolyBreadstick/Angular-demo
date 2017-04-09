@@ -30,6 +30,8 @@ namespace Angular_Demo_Complete.Entities
 
         public String FilePath { get; set; }
 
+        public Boolean canDownload { get; set; }
+
         public virtual List<Song> Songs { get; set; } = new List<Song>();
 
         public byte[] image { get; set; }

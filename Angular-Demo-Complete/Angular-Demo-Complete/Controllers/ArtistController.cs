@@ -490,6 +490,7 @@ namespace Angular_Demo_Complete.Controllers
 
                     if (album != null) {
                         album.FilePath = albumRootPath;
+                        album.canDownload = true;
                         db.SaveChanges();
                     }
                 }
@@ -510,6 +511,7 @@ namespace Angular_Demo_Complete.Controllers
                     if (song != null)
                     {
                         song.FilePath = songRootPath;
+                        song.canDownload = true;
                         db.SaveChanges();
                     }
                 }
@@ -528,6 +530,7 @@ namespace Angular_Demo_Complete.Controllers
                     if (artist != null)
                     {
                         artist.FilePath = path;
+                        artist.canDownload = true;
                         db.SaveChanges();
                     }
                 } 

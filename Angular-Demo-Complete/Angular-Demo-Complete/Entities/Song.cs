@@ -22,6 +22,8 @@ namespace Angular_Demo_Complete.Entities
 
         public String FilePath { get; set; }
 
+        public Boolean canDownload { get; set; }
+
         public virtual List<YoutubeLink> YoutubeLinks { get; set; } = new List<YoutubeLink>();
 
         [NotMapped]
