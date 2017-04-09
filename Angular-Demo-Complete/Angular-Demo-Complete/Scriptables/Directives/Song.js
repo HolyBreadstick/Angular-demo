@@ -5,9 +5,9 @@
         .module('Routing_Main')
         .directive('song', song);
 
-    song.$inject = ['$window', 'SessionState' ,'$sce', '$compile', '$rootScope'];
+    song.$inject = ['$window', 'SessionState' ,'$sce', '$compile', '$rootScope', '$http'];
 
-    function song($window, SessionState, $sce, $compile, $rootScope) {
+    function song($window, SessionState, $sce, $compile, $rootScope, $http) {
         // Usage:
         //     <musicDisplay></musicDisplay>
         // Creates:
@@ -37,7 +37,7 @@
                 };
 
                 $scope.$on('youtube.player.ready', function ($event, player) {
-                    //console.log(player);
+                    
                     //console.log($event);
                     player.playVideo();
                 });
@@ -52,6 +52,35 @@
                         $scope.ToggleVideo();
                     }
                 });
+
+                $scope.Download = function () {
+                    $scope.ToggleVideo();
+                    return $http({
+                        url: SessionState.Endpoint + "/api/Information/Download?link=https://www.youtube.com/watch?v=" + $scope.data.YoutubeLink[0].Link + "&wantVideo=false",
+                        method: "POST"
+                    }).then(function (data) {
+                        console.log(data);
+                        
+
+                        var sampleBytes = data.data.Link;
+
+                        var saveByteArray = (function () {
+                            var a = document.createElement("a");
+                            document.body.appendChild(a);
+                            a.style = "display: none";
+                            return function (data, name) {
+                                a.href = data;
+                                a.download = name;
+                                a.click();
+                            };
+                        }());
+
+                        saveByteArray([sampleBytes], data.data.FileName);
+
+
+                        });
+                };
+
             }
         };
 
