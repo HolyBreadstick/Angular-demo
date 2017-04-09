@@ -11,7 +11,12 @@ namespace Angular_Demo_Complete.Helpers
         public static void CreateArtistFolderStructure(int ID)
         {
             //Need to hold a global path here
+#if DEBUG
             const String RootPath = @"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\ArtistData\";
+
+#else
+            const String RootPath = @"C:\MusicContent\ArtistData\";
+#endif
 
             using (var db = new MusicContext())
             {
