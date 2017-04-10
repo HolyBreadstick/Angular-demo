@@ -297,8 +297,11 @@ namespace Angular_Demo_Complete.Controllers
                         }
 
                         data.Songs[i].YoutubeLink = tmp;
+
+
+                        
                         var songUpdate = (from dt in db.Songs where dt.ID == data.Songs[i].ID select dt).SingleOrDefault();
-                        songUpdate.YoutubeLinks = tmp;
+                        songUpdate.YoutubeLinks = list;
                     }
                 }
 
