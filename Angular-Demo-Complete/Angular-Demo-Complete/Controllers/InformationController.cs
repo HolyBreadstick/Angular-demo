@@ -48,12 +48,17 @@ namespace Angular_Demo_Complete.Controllers
                 return null;
             }
 
+#if Debug
             var downloadLink = "http://localhost:50569/" + RemoveIllegalPathCharacters.FormatForBrowser(totalPath);
+#else
+            var downloadLink = "http://music.baileysproject.com/Music/" + RemoveIllegalPathCharacters.FormatForBrowser(totalPath);
+#endif
 
             return new
             {
                 Link = downloadLink,
-                FileName = Path.GetFileName(totalPath)
+                FileName = Path.GetFileName(totalPath),
+                ConverterDownloadLink = String.Format("http://audio.online-convert.com/convert-to-mp3?external_url={0}&normalize=true", downloadLink)
             };
 
 
@@ -91,7 +96,7 @@ namespace Angular_Demo_Complete.Controllers
              * The first argument is the video where the audio should be extracted from.
              * The second argument is the path to save the audio file.
              */
-            var endPath = Path.Combine(FolderStructures.FindSongFilePath(YoutubeLinkExtractor.FindVideoID(Link)), String.Format(@"{0}\", "Audio"), String.Format(@"{0}{1}", FolderStructures.GetSongName(YoutubeLinkExtractor.FindVideoID(Link)), ".mp3"));
+            var endPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(FolderStructures.FindSongFilePath(YoutubeLinkExtractor.FindVideoID(Link)), String.Format(@"{0}\", "Audio"), String.Format(@"{0}{1}", FolderStructures.GetSongName(YoutubeLinkExtractor.FindVideoID(Link)), ".mp3")));
             var audioDownloader = new VideoDownloader(video, endPath);
             
             /*
@@ -124,13 +129,9 @@ namespace Angular_Demo_Complete.Controllers
              * The first argument is the video to download.
              * The second argument is the path to save the video file.
              */
-            var endPath = Path.Combine(FolderStructures.FindSongFilePath(YoutubeLinkExtractor.FindVideoID(Link)), String.Format(@"{0}\", "Video"), String.Format(@"{0}{1}", FolderStructures.GetSongName(YoutubeLinkExtractor.FindVideoID(Link)), video.VideoExtension));
+            var endPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(FolderStructures.FindSongFilePath(YoutubeLinkExtractor.FindVideoID(Link)), String.Format(@"{0}\", "Video"), String.Format(@"{0}{1}", FolderStructures.GetSongName(YoutubeLinkExtractor.FindVideoID(Link)), video.VideoExtension)));
             var videoDownloader = new VideoDownloader(video, endPath);
-
-
-            // Register the ProgressChanged event and print the current progress
-            videoDownloader.DownloadProgressChanged += (sender, args) => Console.WriteLine(args.ProgressPercentage);
-
+            
             /*
              * Execute the video downloader.
              * For GUI applications note, that this method runs synchronously.

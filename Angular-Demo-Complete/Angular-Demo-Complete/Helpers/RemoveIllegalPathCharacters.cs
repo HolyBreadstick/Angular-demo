@@ -20,5 +20,9 @@ namespace Angular_Demo_Complete.Helpers
             var newPath = path.Substring(path.IndexOf("ArtistData"));
             return newPath.Replace("\\", "/");
         }
+
+        public static String RemoveSpaces(String path) {
+            return path.Replace(" ", "_");
+        }
     }
 }

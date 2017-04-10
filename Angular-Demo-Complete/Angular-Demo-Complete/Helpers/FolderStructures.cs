@@ -25,7 +25,7 @@ namespace Angular_Demo_Complete.Helpers
                 if (artist != null)
                 {
 
-                    var ArtistRootPath = Path.Combine(RootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(artist.firstName)));
+                    var ArtistRootPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(RootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(artist.firstName))));
                     try
                     {
                         //Create the top level for the artist
@@ -42,7 +42,7 @@ namespace Angular_Demo_Complete.Helpers
                     foreach (var album in artist.Albums)
                     {
                         //Form the path
-                        var AlbumRootPath = Path.Combine(ArtistRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(album.title)));
+                        var AlbumRootPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(ArtistRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(album.title))));
                         try
                         {
                             Directory.CreateDirectory(AlbumRootPath);
@@ -60,13 +60,13 @@ namespace Angular_Demo_Complete.Helpers
                             try
                             {
                                 //Root song path
-                                var SongRootPath = Path.Combine(AlbumRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(song.title)));
+                                var SongRootPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(AlbumRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(song.title))));
                                 Directory.CreateDirectory(SongRootPath);
                                 //Path for audio files
-                                var SongSubFolderAudio = Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Audio")));
+                                var SongSubFolderAudio = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Audio"))));
                                 Directory.CreateDirectory(SongSubFolderAudio);
                                 //Path for video files
-                                var SongSubFolderVideo = Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Video")));
+                                var SongSubFolderVideo = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Video"))));
                                 Directory.CreateDirectory(SongSubFolderVideo);
                                 //Update the db so the song has it's path
                                 SaveSongFolderInDb(SongRootPath, song.ID);
@@ -147,8 +147,7 @@ namespace Angular_Demo_Complete.Helpers
                 }
             }
         }
-
-
+        
         public static String FindAlbumFilePath(int ID) {
             using (var db = new MusicContext()) {
                 var albumPath = (from data in db.Albums where data.ID == ID select data.FilePath).SingleOrDefault();
@@ -205,6 +204,27 @@ namespace Angular_Demo_Complete.Helpers
                 }
 
             }
+        }
+
+        public static void DeleteAllFolders() {
+#if DEBUG
+            const String RootPath = @"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\ArtistData\";
+
+#else
+            const String RootPath = @"C:\MusicContent\ArtistData\";
+#endif
+
+            System.IO.DirectoryInfo di = new DirectoryInfo(RootPath);
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
         }
 
     }

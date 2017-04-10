@@ -101,7 +101,9 @@
     <Content Include="Content\select.css" />
     <Content Include="Content\select.min.css" />
     <Content Include="Content\ui-bootstrap-csp.css" />
+    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="Images\Production\favicon.ico" />
     <Content Include="Pages\Templates\Directives\YoutubeVideo\YoutubeVideo.html" />
     <Content Include="Scriptables\Directives\angular-youtube-embed.js" />
     <Content Include="Scriptables\Directives\youtubeVideo.js" />
@@ -183,6 +185,7 @@
     <Compile Include="Controllers\InformationController.cs" />
     <Compile Include="Entities\Album.cs" />
     <Compile Include="Entities\Artist.cs" />
+    <Compile Include="Entities\BackupArtists.cs" />
     <Compile Include="Entities\Song.cs" />
     <Compile Include="Entities\YoutubeLink.cs" />
     <Compile Include="Global.asax.cs">
@@ -1015,6 +1018,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
