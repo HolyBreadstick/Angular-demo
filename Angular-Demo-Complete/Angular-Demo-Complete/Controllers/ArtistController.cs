@@ -21,7 +21,7 @@ namespace Angular_Demo_Complete.Controllers
         //Set a base URL for the api
         private String baseUrl = "http://ws.audioscrobbler.com/2.0/";
         //Need API key for lastFM
-        private String apiKey = "b1f2bc595131a9030dfdd1d2103d447a";
+        private String apiKey = "9f0228753db24ea3148fe0934e2d0d27";
         private WebClient client = new WebClient();
 
         
@@ -36,7 +36,7 @@ namespace Angular_Demo_Complete.Controllers
         {
             
             var ranArt = (from user in db.Albums orderby Guid.NewGuid() select user.ID).Take(db.Albums.Count() >= 25 ? 25 : db.Albums.Count());
-            var info = (from data in db.Albums orderby data.ID where ranArt.Contains(data.ID) select data.ID);
+            var info = (from data in db.Albums orderby data.ID where ranArt.Contains(data.ID) & data.Owner != null orderby data.title select data.ID);
 
             return info;
         }
@@ -82,7 +82,7 @@ namespace Angular_Demo_Complete.Controllers
 
             db.Albums.RemoveRange((from data in db.Albums where data.Owner == null select data));
 
-
+            db.SaveChanges();
 
             foreach (var art in (from data in db.ArtistBackups select data.firstName).ToList()) {
                 AddArtist(art);
@@ -189,13 +189,13 @@ namespace Angular_Demo_Complete.Controllers
                  ID = data.ID,
                  AddedAt = data.AddedAt,
                  firstName = data.firstName,
-                 Albums = (from dt in data.Albums select new FastAlbumSearch() {
+                 Albums = (from dt in data.Albums orderby dt.title select new FastAlbumSearch() {
                      ArtistName = dt.Owner.firstName,
                      ID = dt.ID,
                      imageLink = dt.imageLink,
                      title = dt.title,
                      views = dt.views,
-                     Songs = (from ds in dt.Songs select new FastSongSearch() {
+                     Songs = (from ds in dt.Songs orderby ds.title select new FastSongSearch() {
                          discount = ds.discount,
                          ID = ds.ID,
                          onSale = ds.onSale,
@@ -309,7 +309,7 @@ namespace Angular_Demo_Complete.Controllers
             if (song != null)
             {
                 if (song.YoutubeLinks.Count() != 0)
-                    return null;
+                    return new List<Entities.YoutubeLink>();
                 else
                 {
                     var link = SearchYoutube(song.title, song.Owner.Owner.firstName);
@@ -333,27 +333,36 @@ namespace Angular_Demo_Complete.Controllers
         }
         
         private List<String> SearchYoutube(String SongName, String ArtistName) {
-            var client = new WebClient();
-            client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
-            var Params = "&type=video&videoCatergoryId=10&key=AIzaSyBDg51nViqZI8iupXHPg1v2ODyORtIVYF8&q={0}";
-
-            var completeLink = client.BaseAddress + String.Format(Params, SongName + " by " + ArtistName);
-
-            var respone = client.DownloadString(completeLink);
-
-            var result = JsonConvert.DeserializeObject<YoutubeSongSearch>(respone);
-
-            if (result.items != null & result.items.Length != 0)
+            try
             {
-                var temp = new List<String>();
+                var client = new WebClient();
+                client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
+                var Params = "&type=video&videoCatergoryId=10&key=AIzaSyBDg51nViqZI8iupXHPg1v2ODyORtIVYF8&q={0}";
 
-                foreach (var i in result.items.Take(result.items.Length < 10 ? result.items.Length : 10)) {
-                    temp.Add(i.id.videoId);
+                var completeLink = client.BaseAddress + String.Format(Params, SongName + " by " + ArtistName);
+
+                var respone = client.DownloadString(completeLink);
+
+                var result = JsonConvert.DeserializeObject<YoutubeSongSearch>(respone);
+
+                if (result.items != null & result.items.Length != 0)
+                {
+                    var temp = new List<String>();
+
+                    foreach (var i in result.items.Take(result.items.Length < 10 ? result.items.Length : 10))
+                    {
+                        temp.Add(i.id.videoId);
+                    }
+
+                    return temp;
                 }
-
-                return temp;
+                else
+                {
+                    return new List<string>();
+                }
             }
-            else {
+            catch (Exception)
+            {
                 return new List<string>();
             }
         }
@@ -419,14 +428,21 @@ namespace Angular_Demo_Complete.Controllers
                         storedPrice = 1.29
                     };
 
-                    var link = SearchYoutube(s.name, s.artist.name);
-
-                    foreach (var i in link)
+                    try
                     {
-                        newSong.YoutubeLinks.Add(new Entities.YoutubeLink()
+                        var link = SearchYoutube(s.name, s.artist.name);
+
+                        foreach (var i in link)
                         {
-                            Link = i
-                        });
+                            newSong.YoutubeLinks.Add(new Entities.YoutubeLink()
+                            {
+                                Link = i
+                            });
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        
                     }
                     
                     Album.Songs.Add(newSong);
