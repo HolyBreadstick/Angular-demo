@@ -14,7 +14,7 @@
         // 
 
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/Song/Song.html?Version=1.14",
+            templateUrl: "/Pages/Templates/Directives/Song/Song.html?Version=1.15",
             scope: {
                 data: "="
             },
