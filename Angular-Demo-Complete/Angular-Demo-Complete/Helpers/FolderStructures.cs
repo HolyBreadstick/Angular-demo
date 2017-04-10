@@ -25,7 +25,7 @@ namespace Angular_Demo_Complete.Helpers
                 if (artist != null)
                 {
 
-                    var ArtistRootPath = Path.Combine(RootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(artist.firstName)));
+                    var ArtistRootPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(RootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(artist.firstName))));
                     try
                     {
                         //Create the top level for the artist
