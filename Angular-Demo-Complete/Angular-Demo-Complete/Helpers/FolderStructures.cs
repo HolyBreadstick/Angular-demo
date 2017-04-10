@@ -42,7 +42,7 @@ namespace Angular_Demo_Complete.Helpers
                     foreach (var album in artist.Albums)
                     {
                         //Form the path
-                        var AlbumRootPath = Path.Combine(ArtistRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(album.title)));
+                        var AlbumRootPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(ArtistRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(album.title))));
                         try
                         {
                             Directory.CreateDirectory(AlbumRootPath);
@@ -60,13 +60,13 @@ namespace Angular_Demo_Complete.Helpers
                             try
                             {
                                 //Root song path
-                                var SongRootPath = Path.Combine(AlbumRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(song.title)));
+                                var SongRootPath = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(AlbumRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters(song.title))));
                                 Directory.CreateDirectory(SongRootPath);
                                 //Path for audio files
-                                var SongSubFolderAudio = Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Audio")));
+                                var SongSubFolderAudio = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Audio"))));
                                 Directory.CreateDirectory(SongSubFolderAudio);
                                 //Path for video files
-                                var SongSubFolderVideo = Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Video")));
+                                var SongSubFolderVideo = RemoveIllegalPathCharacters.RemoveSpaces(Path.Combine(SongRootPath, String.Format(@"{0}\", RemoveIllegalPathCharacters.RemoveCharacters("Video"))));
                                 Directory.CreateDirectory(SongSubFolderVideo);
                                 //Update the db so the song has it's path
                                 SaveSongFolderInDb(SongRootPath, song.ID);
