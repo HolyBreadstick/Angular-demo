@@ -297,6 +297,8 @@ namespace Angular_Demo_Complete.Controllers
                         }
 
                         data.Songs[i].YoutubeLink = tmp;
+                        var songUpdate = (from dt in db.Songs where dt.ID == data.Songs[i].ID select dt).SingleOrDefault();
+                        songUpdate.YoutubeLinks = tmp;
                     }
                 }
 
@@ -440,22 +442,22 @@ namespace Angular_Demo_Complete.Controllers
                         storedPrice = 1.29
                     };
 
-                    try
-                    {
-                        var link = SearchYoutube(s.name, s.artist.name);
+                    //try
+                    //{
+                    //    var link = SearchYoutube(s.name, s.artist.name);
 
-                        foreach (var i in link)
-                        {
-                            newSong.YoutubeLinks.Add(new Entities.YoutubeLink()
-                            {
-                                Link = i
-                            });
-                        }
-                    }
-                    catch (Exception)
-                    {
+                    //    foreach (var i in link)
+                    //    {
+                    //        newSong.YoutubeLinks.Add(new Entities.YoutubeLink()
+                    //        {
+                    //            Link = i
+                    //        });
+                    //    }
+                    //}
+                    //catch (Exception)
+                    //{
                         
-                    }
+                    //}
                     
                     Album.Songs.Add(newSong);
                     db.SaveChanges();
