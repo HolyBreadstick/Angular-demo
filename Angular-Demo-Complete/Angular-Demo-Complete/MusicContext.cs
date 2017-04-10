@@ -12,8 +12,7 @@ namespace Angular_Demo_Complete
         public MusicContext() : base("MusicContext") {
             Database.CreateIfNotExists();
         }
-
-        adsfasdf
+        
         public DbSet<Artist> Artist { get; set; }
         public DbSet<BackupArtists> ArtistBackups { get; set; }
         public DbSet<Album> Albums { get; set; }
