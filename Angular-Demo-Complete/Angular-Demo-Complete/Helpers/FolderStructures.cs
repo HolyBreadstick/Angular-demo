@@ -147,8 +147,7 @@ namespace Angular_Demo_Complete.Helpers
                 }
             }
         }
-
-
+        
         public static String FindAlbumFilePath(int ID) {
             using (var db = new MusicContext()) {
                 var albumPath = (from data in db.Albums where data.ID == ID select data.FilePath).SingleOrDefault();
@@ -205,6 +204,27 @@ namespace Angular_Demo_Complete.Helpers
                 }
 
             }
+        }
+
+        public static void DeleteAllFolders() {
+#if DEBUG
+            const String RootPath = @"C:\Users\baile\Source\Repos\Angular-demo\Angular-Demo-Complete\Angular-Demo-Complete\ArtistData\";
+
+#else
+            const String RootPath = @"C:\MusicContent\ArtistData\";
+#endif
+
+            System.IO.DirectoryInfo di = new DirectoryInfo(RootPath);
+
+            foreach (FileInfo file in di.GetFiles())
+            {
+                file.Delete();
+            }
+            foreach (DirectoryInfo dir in di.GetDirectories())
+            {
+                dir.Delete(true);
+            }
+
         }
 
     }

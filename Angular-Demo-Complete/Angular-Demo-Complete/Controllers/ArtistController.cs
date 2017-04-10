@@ -47,6 +47,8 @@ namespace Angular_Demo_Complete.Controllers
 
             timer.Start();
 
+            FolderStructures.DeleteAllFolders();
+
             //Keeps Artist and their data if the data is not a day old.
             var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 | true==Force select data.firstName).ToList();
 
