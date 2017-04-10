@@ -414,7 +414,7 @@ namespace Angular_Demo_Complete.Controllers
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }
