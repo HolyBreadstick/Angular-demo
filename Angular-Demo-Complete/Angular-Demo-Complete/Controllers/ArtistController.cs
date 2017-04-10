@@ -149,7 +149,19 @@ namespace Angular_Demo_Complete.Controllers
                             db.Artist.Add(Art);
                             db.SaveChanges();
                             AddAlbum(Art.ID, ArtistSearch.topalbums.album);
-                            FolderStructures.CreateArtistFolderStructure(Art.ID);
+                            using (var db = new MusicContext()) {
+                                var artist = (from data in db.Artist where data.ID == Art.ID select data).SingleOrDefault();
+
+                                if (artist != null) {
+                                    if (artist.Albums.Count != 0)
+                                    {
+                                        FolderStructures.CreateArtistFolderStructure(Art.ID);
+                                    }
+                                    else {
+                                        RemoveArtist(artist.firstName);
+                                    }
+                                }
+                            }
                         }
                         }
                     }
