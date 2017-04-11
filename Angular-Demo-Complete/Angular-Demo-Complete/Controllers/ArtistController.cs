@@ -126,16 +126,6 @@ namespace Angular_Demo_Complete.Controllers
             }
             else {
                     var Art = new Entities.Artist();
-                    if (Artist.Contains(","))
-                    {
-                        var allArtist = Artist.Split(',');
-                        foreach (var art in allArtist)
-                        {
-                            AddArtist(art.Trim());
-                        }
-                    }
-                    else
-                    {
                         //Need to make call to get the artist data
                         var rawData = client.DownloadString(String.Format(baseUrl + "?method=artist.gettopalbums&artist={0}&api_key={1}&format=json", Artist, apiKey));
 
@@ -162,7 +152,6 @@ namespace Angular_Demo_Complete.Controllers
                                     }
                                 }
                             }
-                        }
                         }
                     }
 
