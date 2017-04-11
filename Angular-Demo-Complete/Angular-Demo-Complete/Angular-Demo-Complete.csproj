@@ -133,6 +133,7 @@
     <Content Include="Pages\Templates\Directives\YoutubeVideo\YoutubeVideo.html" />
     <Content Include="Scriptables\Directives\angular-youtube-embed.js" />
     <Content Include="Scriptables\Directives\youtubeVideo.js" />
+    <Content Include="Scripts\Polyfills\IncludesPolyfill.js" />
     <Content Include="SQL Server Scripts\Delete All.sql" />
     <Content Include="Images\Original\AlbumBackground.jpg" />
     <Content Include="Images\Production\AlbumBackground.min.jpg" />
