@@ -291,6 +291,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="Models\AlbumGetInfo.cs" />
+    <Compile Include="Models\AlbumSearchByName.cs" />
     <Compile Include="Models\ArtistTopAlbums.cs" />
     <Compile Include="Models\FastAlbumSearch.cs" />
     <Compile Include="Models\FastArtistSearch.cs" />

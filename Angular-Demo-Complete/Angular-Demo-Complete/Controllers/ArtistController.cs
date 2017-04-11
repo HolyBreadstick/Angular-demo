@@ -10,6 +10,7 @@ using Angular_Demo_Complete.Models;
 using System.Data.Entity.SqlServer;
 using System.IO;
 using Angular_Demo_Complete.Helpers;
+using Angular_Demo_Complete.Models.AlbumManualSearch;
 
 namespace Angular_Demo_Complete.Controllers
 {
@@ -22,15 +23,13 @@ namespace Angular_Demo_Complete.Controllers
         private String baseUrl = "http://ws.audioscrobbler.com/2.0/";
         //Need API key for lastFM
         private String apiKey = "9f0228753db24ea3148fe0934e2d0d27";
+
         private WebClient client = new WebClient();
-
         
-
         public ArtistController() {
             db = new MusicContext();
         }
-
-
+        
         [Route("All")]
         public object GetAllArtistID()
         {
@@ -160,6 +159,32 @@ namespace Angular_Demo_Complete.Controllers
             }
 
         }
+
+        [Route("Add/Album")]
+        public object AddAlbumManually(String Album, String Artist) {
+
+            //Link to LastFM Album Search
+            //String.Format(baseUrl + "?method=album.search&album={0}&api_key={1}&format=json", Album, apiKey)
+
+
+            var doesArtistExist = (from data in db.Artist where data.firstName == Artist select data).SingleOrDefault();
+
+            if (doesArtistExist != null) {
+                var rawData = client.DownloadString(String.Format(baseUrl + "?method=album.search&album={0}&api_key={1}&format=json&limit=100", Album, apiKey));
+
+                //Convert RawData into a C# Object
+                var AlbumSearch = JsonConvert.DeserializeObject<AlbumSearchByName>(rawData);
+
+                if (AlbumSearch.results != null) {
+                    var limitedSearch = (from data in AlbumSearch.results.albummatches.album where data.artist.Contains(Artist) && data.name.Contains(Album) select data);
+                }
+            }
+
+
+
+            return null;
+        }
+
 
         [Route("Search")]
         public object SearchArtist(String Artist) {
