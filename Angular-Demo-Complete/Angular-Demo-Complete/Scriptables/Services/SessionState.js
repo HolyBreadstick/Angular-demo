@@ -22,7 +22,7 @@
                 
             },
             Endpoint: 'http://music.baileysproject.com/',
-            isMac: true,
+            isMac: false,
             ArtistData: {
                 Current: {},
                 Search: [],
