@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Angular_Demo_Complete
 {
@@ -19,6 +20,9 @@ namespace Angular_Demo_Complete
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            var cors = new EnableCorsAttribute("*", "*", "*");
+            config.EnableCors(cors);
 
             var json = GlobalConfiguration.Configuration.Formatters.JsonFormatter;
 
