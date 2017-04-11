@@ -47,7 +47,7 @@
             forceSSL();
         }
 
-        if(State.isMac){
+        if(!State.isMac){
 
             if ($location.host().includes("localhost")) {
             var local = 'http://localhost:50569/'
