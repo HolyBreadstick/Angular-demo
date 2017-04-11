@@ -12,12 +12,13 @@ namespace Angular_Demo_Complete
         public MusicContext() : base("MusicContext") {
             Database.CreateIfNotExists();
         }
-
-
+        
         public DbSet<Artist> Artist { get; set; }
+        public DbSet<BackupArtists> ArtistBackups { get; set; }
         public DbSet<Album> Albums { get; set; }
         public DbSet<Song> Songs { get; set; }
+        public DbSet<YoutubeLink> YoutubeLinks { get; set; }
 
-        
+
     }
 }

@@ -5,7 +5,7 @@
 </head>
 
 <div class="container col-xs-12 spacing">
-    <div class="row song-item">
+    <div class="row song-item FakeClickable" ng-click="ToggleVideo()">
         <div style="display:inline-block" class="pull-left col-xs-7 col-sm-9">
             <p><span class="glyphicon glyphicon-cd"></span> {{data.title | limitTo: 100}}</p>
         </div>
@@ -13,7 +13,5 @@
             <p class="text-right">Price: {{data.price | price}}</p>
         </div>
     </div>
-    <div>
-        <iframe class="center-block" width="560" height="315" ng-src="{{CompleteLink}}" frameborder="0" allowfullscreen></iframe>
-    </div>
+    <youtube-video ng-if="show" video-id="data.YoutubeLink[0].Link"></youtube-video>
 </div>
