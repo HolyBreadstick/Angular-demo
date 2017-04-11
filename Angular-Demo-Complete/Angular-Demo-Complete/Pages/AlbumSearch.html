@@ -7,12 +7,13 @@
             <p>Price: {{Album.price | price}}</p>
             <p>Views: {{Album.views | number}}</p>
             <p>Songs: {{Album.Songs.length}}</p>
+            <input type="button" value="Play Songs" class="btn" ng-click="PlayAll()"/>
         </div>
     </div>
 
     <div class="row Music-Listing">
         <div class="page-header text-center">
-            <h1>{{Album.title}} Songs by {{Album.ArtistName}}</h1>
+            <h1>{{Album.title}} by {{Album.ArtistName}}</h1>
         </div>
         <div class="col-md-8 col-md-offset-2">
             <song ng-repeat="Song in Album.Songs" data="Song"></song>

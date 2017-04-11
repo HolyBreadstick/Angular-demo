@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using Angular_Demo_Complete.Models.ArtistSearch;
 using Angular_Demo_Complete.Models;
 using System.Data.Entity.SqlServer;
+using System.IO;
+using Angular_Demo_Complete.Helpers;
 
 namespace Angular_Demo_Complete.Controllers
 {
@@ -19,7 +21,7 @@ namespace Angular_Demo_Complete.Controllers
         //Set a base URL for the api
         private String baseUrl = "http://ws.audioscrobbler.com/2.0/";
         //Need API key for lastFM
-        private String apiKey = "b1f2bc595131a9030dfdd1d2103d447a";
+        private String apiKey = "9f0228753db24ea3148fe0934e2d0d27";
         private WebClient client = new WebClient();
 
         
@@ -34,7 +36,7 @@ namespace Angular_Demo_Complete.Controllers
         {
             
             var ranArt = (from user in db.Albums orderby Guid.NewGuid() select user.ID).Take(db.Albums.Count() >= 25 ? 25 : db.Albums.Count());
-            var info = (from data in db.Albums orderby data.ID where ranArt.Contains(data.ID) select data.ID);
+            var info = (from data in db.Albums orderby data.ID where ranArt.Contains(data.ID) & data.Owner != null orderby data.title select data.ID);
 
             return info;
         }
@@ -45,30 +47,48 @@ namespace Angular_Demo_Complete.Controllers
 
             timer.Start();
 
+            FolderStructures.DeleteAllFolders();
+
             //Keeps Artist and their data if the data is not a day old.
             var allArtistNames = (from data in db.Artist where SqlFunctions.DateDiff("day", data.AddedAt, DateTime.UtcNow) > 1 | true==Force select data.firstName).ToList();
+
+            foreach (var name in allArtistNames) {
+                db.ArtistBackups.Add(new Entities.BackupArtists() {
+                firstName = name});
+            }
+
+            db.SaveChanges();
 
             for (int i = 0; i < allArtistNames.Count; i++) {
                 if ((from data in db.Artist where data.Albums.Count == 0 select data.firstName).ToList().Contains(allArtistNames[i])) {
                     RemoveArtist(allArtistNames[i]);
                     allArtistNames.RemoveAt(i);
+                    var name = allArtistNames[i];
+                    db.ArtistBackups.Remove((from data in db.ArtistBackups where data.firstName == name select data).Single());
                 }
             }
+
+            db.SaveChanges();
 
             foreach (var art in allArtistNames) {
                 RemoveArtist(art);
             }
+
+            var rogueLinks = (from data in db.YoutubeLinks where data.Owner == null select data);
+            db.YoutubeLinks.RemoveRange(rogueLinks);
 
             var rogueSongs = (from data in db.Songs where data.Owner == null select data);
             db.Songs.RemoveRange(rogueSongs);
 
             db.Albums.RemoveRange((from data in db.Albums where data.Owner == null select data));
 
+            db.SaveChanges();
 
-
-            foreach (var art in allArtistNames) {
+            foreach (var art in (from data in db.ArtistBackups select data.firstName).ToList()) {
                 AddArtist(art);
+                db.ArtistBackups.Remove((from data in db.ArtistBackups where data.firstName == art select data).Single());
             }
+
             db.SaveChanges();
             timer.Stop();
             return new {
@@ -82,6 +102,9 @@ namespace Angular_Demo_Complete.Controllers
             var artist = (from data in db.Artist where data.firstName == Artist select data).First();
 
             foreach (var alb in artist.Albums) {
+                foreach (var songs in alb.Songs) {
+                    songs.YoutubeLinks.RemoveRange(0, songs.YoutubeLinks.Count);
+                }
                 alb.Songs.RemoveRange(0, alb.Songs.Count);
             }
             artist.Albums.RemoveRange(0, artist.Albums.Count);
@@ -103,29 +126,32 @@ namespace Angular_Demo_Complete.Controllers
             }
             else {
                     var Art = new Entities.Artist();
-                    if (Artist.Contains(","))
-                    {
-                        var allArtist = Artist.Split(',');
-                        foreach (var art in allArtist)
-                        {
-                            AddArtist(art.Trim());
-                        }
-                    }
-                    else
-                    {
                         //Need to make call to get the artist data
                         var rawData = client.DownloadString(String.Format(baseUrl + "?method=artist.gettopalbums&artist={0}&api_key={1}&format=json", Artist, apiKey));
 
                         var ArtistSearch = JsonConvert.DeserializeObject<ArtistTopAlbums>(rawData);
 
                         if (ArtistSearch != null && ArtistSearch.topalbums != null) {
+                    
                            Art.firstName = ArtistSearch.topalbums.attr.artist;
-                        
+                        //Need to create folder structure for the File System
                             if (ArtistSearch.topalbums.album.Length != 0)
                             {
-                                db.Artist.Add(Art);
-                                db.SaveChanges();
-                                AddAlbum(Art.ID, ArtistSearch.topalbums.album);
+                            db.Artist.Add(Art);
+                            db.SaveChanges();
+                            AddAlbum(Art.ID, ArtistSearch.topalbums.album);
+                            using (var db = new MusicContext()) {
+                                var artist = (from data in db.Artist where data.ID == Art.ID select data).SingleOrDefault();
+
+                                if (artist != null) {
+                                    if (artist.Albums.Count != 0)
+                                    {
+                                        FolderStructures.CreateArtistFolderStructure(Art.ID);
+                                    }
+                                    else {
+                                        RemoveArtist(artist.firstName);
+                                    }
+                                }
                             }
                         }
                     }
@@ -137,11 +163,26 @@ namespace Angular_Demo_Complete.Controllers
 
         [Route("Search")]
         public object SearchArtist(String Artist) {
-            return (from search in db.Artist where search.firstName.Contains(Artist) select new {
-                ID = search.ID,
-                AddedAt = search.AddedAt,
-                firstName = search.firstName
-            }).Take(10).ToList();
+            if (Artist == "*")
+            {
+                return (from search in db.Artist
+                        select new
+                        {
+                            ID = search.ID,
+                            AddedAt = search.AddedAt,
+                            firstName = search.firstName
+                        }).ToList();
+            }
+            else {
+                return (from search in db.Artist
+                        where search.firstName.Contains(Artist)
+                        select new
+                        {
+                            ID = search.ID,
+                            AddedAt = search.AddedAt,
+                            firstName = search.firstName
+                        }).Take(10).ToList();
+            }
         }
 
         [Route("Search/Artist")]
@@ -150,13 +191,13 @@ namespace Angular_Demo_Complete.Controllers
                  ID = data.ID,
                  AddedAt = data.AddedAt,
                  firstName = data.firstName,
-                 Albums = (from dt in data.Albums select new FastAlbumSearch() {
+                 Albums = (from dt in data.Albums orderby dt.title select new FastAlbumSearch() {
                      ArtistName = dt.Owner.firstName,
                      ID = dt.ID,
                      imageLink = dt.imageLink,
                      title = dt.title,
                      views = dt.views,
-                     Songs = (from ds in dt.Songs select new FastSongSearch() {
+                     Songs = (from ds in dt.Songs orderby ds.title select new FastSongSearch() {
                          discount = ds.discount,
                          ID = ds.ID,
                          onSale = ds.onSale,
@@ -190,7 +231,9 @@ namespace Angular_Demo_Complete.Controllers
                                 onSale = song.onSale,
                                 storedPrice = song.storedPrice,
                                 title = song.title,
-                                YoutubeLink = song.YoutubeLink
+                                YoutubeLink = (from link in song.YoutubeLinks select new FastYoutubeLink() {
+                                    Link = link.Link
+                                }).ToList()
                             }).ToList(),
                             ArtistName = search.Owner.firstName,
                             imageLink = search.imageLink,
@@ -211,13 +254,19 @@ namespace Angular_Demo_Complete.Controllers
                                 onSale = song.onSale,
                                 storedPrice = song.storedPrice,
                                 title = song.title,
-                                YoutubeLink = song.YoutubeLink
+                                YoutubeLink = (from link in song.YoutubeLinks
+                                               select new FastYoutubeLink()
+                                               {
+                                                   Link = link.Link
+                                               }).ToList()
                             }).ToList(),
                             ArtistName = search.Owner.firstName,
                             imageLink = search.imageLink,
                             views = search.views
                         }).SingleOrDefault();
-                data.Songs.Clear();
+                if (data != null) {
+                    data.Songs.Clear();
+                }
             }
 
             if (data != null && data.Songs != null) {
@@ -225,9 +274,22 @@ namespace Angular_Demo_Complete.Controllers
                 {
                     var temp = data.Songs[i];
 
-                    if (String.IsNullOrEmpty(temp.YoutubeLink))
+                    if (temp.YoutubeLink.Count() == 0)
                     {
-                        data.Songs[i].YoutubeLink = SearchYoutube(data.Songs[i].ID);
+                        var list = SearchYoutube(data.Songs[i].ID);
+
+                        var tmp = new List<FastYoutubeLink>();
+
+                        foreach (var x in list) {
+                            tmp.Add(new FastYoutubeLink() {
+                                Link = x.Link
+                            });
+                        }
+
+                        data.Songs[i].YoutubeLink = tmp;
+                        var tempID = data.Songs[i].ID;
+                        var songUpdate = (from dt in db.Songs where dt.ID == tempID select dt).SingleOrDefault();
+                        songUpdate.YoutubeLinks = list;
                     }
                 }
 
@@ -245,56 +307,70 @@ namespace Angular_Demo_Complete.Controllers
         }
 
         [Route("Song/Youtube")]
-        public String SearchYoutube(int Id) {
+        public List<Entities.YoutubeLink> SearchYoutube(int Id) {
 
             var song = (from data in db.Songs where data.ID == Id select data).SingleOrDefault();
 
             if (song != null)
             {
-                if (!String.IsNullOrEmpty(song.YoutubeLink))
-                    return song.YoutubeLink;
+                if (song.YoutubeLinks.Count() != 0)
+                    return song.YoutubeLinks;
                 else
                 {
                     var link = SearchYoutube(song.title, song.Owner.Owner.firstName);
 
-                    song.YoutubeLink = link;
+                    foreach (var i in link)
+                    {
+                        song.YoutubeLinks.Add(new Entities.YoutubeLink()
+                        {
+                            Link = i
+                        });
+                    }
 
                     db.SaveChanges();
 
-                    return link;
+                    return song.YoutubeLinks;
 
                 }
             }
             else {
-                return "";
+                return new List<Entities.YoutubeLink>();
             }
 
         }
-
-
-        private String SearchYoutube(String SongName, String ArtistName) {
-            var client = new WebClient();
-            client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
-            var Params = "&type=video&videoCatergoryId=10&key=AIzaSyBDg51nViqZI8iupXHPg1v2ODyORtIVYF8&q={0}";
-
-            var completeLink = client.BaseAddress + String.Format(Params, SongName + " by " + ArtistName);
-
-            var respone = client.DownloadString(completeLink);
-
-            var result = JsonConvert.DeserializeObject<YoutubeSongSearch>(respone);
-
-            if (result.items != null & result.items.Length != 0)
+        
+        private List<String> SearchYoutube(String SongName, String ArtistName) {
+            try
             {
-                if (!string.IsNullOrEmpty(result.items[0].id.videoId))
+                var client = new WebClient();
+                client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
+                var Params = "&type=video&videoCatergoryId=10&key=AIzaSyDpmlyRzIJT7tClfFDK6mjblDJBG3WY9W8&q={0}";
+
+                var completeLink = client.BaseAddress + String.Format(Params, SongName + " by " + ArtistName);
+
+                var respone = client.DownloadString(completeLink);
+
+                var result = JsonConvert.DeserializeObject<YoutubeSongSearch>(respone);
+
+                if (result.items != null & result.items.Length != 0)
                 {
-                    return result.items[0].id.videoId;
+                    var temp = new List<String>();
+
+                    foreach (var i in result.items.Take(result.items.Length < 10 ? result.items.Length : 10))
+                    {
+                        temp.Add(i.id.videoId);
+                    }
+
+                    return temp;
                 }
-                else {
-                    return "";
+                else
+                {
+                    return new List<string>();
                 }
             }
-            else {
-                return "";
+            catch (Exception ex)
+            {
+                return new List<string>();
             }
         }
 
@@ -333,7 +409,7 @@ namespace Angular_Demo_Complete.Controllers
                         }
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
 
                 }
@@ -358,13 +434,30 @@ namespace Angular_Demo_Complete.Controllers
                         onSale = rn.Next(0, 100) < 25,
                         storedPrice = 1.29
                     };
-                    newSong.YoutubeLink = SearchYoutube(s.name, s.artist.name);
+
+                    //try
+                    //{
+                    //    var link = SearchYoutube(s.name, s.artist.name);
+
+                    //    foreach (var i in link)
+                    //    {
+                    //        newSong.YoutubeLinks.Add(new Entities.YoutubeLink()
+                    //        {
+                    //            Link = i
+                    //        });
+                    //    }
+                    //}
+                    //catch (Exception)
+                    //{
+                        
+                    //}
+                    
                     Album.Songs.Add(newSong);
                     db.SaveChanges();
                 }
             }
 
         }
-
+        
     }
 }

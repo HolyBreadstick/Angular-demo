@@ -13,10 +13,8 @@
         // Creates:
         // 
 
-        //Testing
-
         var directive = {
-            templateUrl: "/Pages/Templates/Directives/Loader/Loader.html?Version=1.8",
+            templateUrl: "/Pages/Templates/Directives/Loader/Loader.html?Version=1.16",
             replace: false,
             restrict: "E",
             scope: {
