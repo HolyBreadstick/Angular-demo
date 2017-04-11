@@ -132,6 +132,7 @@ namespace Angular_Demo_Complete.Controllers
                         var ArtistSearch = JsonConvert.DeserializeObject<ArtistTopAlbums>(rawData);
 
                         if (ArtistSearch != null && ArtistSearch.topalbums != null) {
+                    
                            Art.firstName = ArtistSearch.topalbums.attr.artist;
                         //Need to create folder structure for the File System
                             if (ArtistSearch.topalbums.album.Length != 0)
