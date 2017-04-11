@@ -297,8 +297,8 @@ namespace Angular_Demo_Complete.Controllers
                         }
 
                         data.Songs[i].YoutubeLink = tmp;
-                        
-                        var songUpdate = (from dt in db.Songs where dt.ID == data.Songs[i].ID select dt).SingleOrDefault();
+                        var tempID = data.Songs[i].ID;
+                        var songUpdate = (from dt in db.Songs where dt.ID == tempID select dt).SingleOrDefault();
                         songUpdate.YoutubeLinks = list;
                     }
                 }
@@ -324,17 +324,19 @@ namespace Angular_Demo_Complete.Controllers
             if (song != null)
             {
                 if (song.YoutubeLinks.Count() != 0)
-                    return new List<Entities.YoutubeLink>();
+                    return song.YoutubeLinks;
                 else
                 {
                     var link = SearchYoutube(song.title, song.Owner.Owner.firstName);
 
-                    foreach (var i in link) {
-                        song.YoutubeLinks.Add(new Entities.YoutubeLink() {
+                    foreach (var i in link)
+                    {
+                        song.YoutubeLinks.Add(new Entities.YoutubeLink()
+                        {
                             Link = i
                         });
                     }
-                    
+
                     db.SaveChanges();
 
                     return song.YoutubeLinks;
@@ -352,7 +354,7 @@ namespace Angular_Demo_Complete.Controllers
             {
                 var client = new WebClient();
                 client.BaseAddress = "https://www.googleapis.com/youtube/v3/search?part=snippet";
-                var Params = "&type=video&videoCatergoryId=10&key=AIzaSyBDg51nViqZI8iupXHPg1v2ODyORtIVYF8&q={0}";
+                var Params = "&type=video&videoCatergoryId=10&key=AIzaSyDpmlyRzIJT7tClfFDK6mjblDJBG3WY9W8&q={0}";
 
                 var completeLink = client.BaseAddress + String.Format(Params, SongName + " by " + ArtistName);
 
@@ -376,7 +378,7 @@ namespace Angular_Demo_Complete.Controllers
                     return new List<string>();
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return new List<string>();
             }
