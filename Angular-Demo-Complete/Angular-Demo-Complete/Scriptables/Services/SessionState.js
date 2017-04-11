@@ -22,6 +22,7 @@
                 
             },
             Endpoint: 'http://music.baileysproject.com/',
+            isMac: true,
             ArtistData: {
                 Current: {},
                 Search: [],
@@ -46,10 +47,17 @@
             forceSSL();
         }
 
-        if ($location.host().includes("localhost")) {
+        if(State.isMac){
+
+            if ($location.host().includes("localhost")) {
             var local = 'http://localhost:50569/'
             State.Endpoint = local;
         } else {
+            var production = 'http://music.baileysproject.com/';
+            State.Endpoint = production;
+        }
+
+        }else {
             var production = 'http://music.baileysproject.com/';
             State.Endpoint = production;
         }
