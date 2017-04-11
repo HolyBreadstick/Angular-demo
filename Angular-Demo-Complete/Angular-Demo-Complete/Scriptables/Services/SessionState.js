@@ -22,7 +22,7 @@
                 
             },
             Endpoint: 'http://music.baileysproject.com/',
-            isMacLocalHost: false,
+            isLocalHostNotHosted: false, //You need to change this variable to true when you're doing this on a mac or linux device.'
             ArtistData: {
                 Current: {},
                 Search: [],
@@ -47,7 +47,7 @@
             forceSSL();
         }
 
-        if(!State.isMacLocalHost){
+        if(!State.isLocalHostNotHosted){
 
             if ($location.host().includes("localhost")) {
             var local = 'http://localhost:50569/'
