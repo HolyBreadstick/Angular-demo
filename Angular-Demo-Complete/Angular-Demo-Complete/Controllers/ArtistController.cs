@@ -10,6 +10,7 @@ using Angular_Demo_Complete.Models;
 using System.Data.Entity.SqlServer;
 using System.IO;
 using Angular_Demo_Complete.Helpers;
+using System.Web;
 
 namespace Angular_Demo_Complete.Controllers
 {
@@ -391,7 +392,7 @@ namespace Angular_Demo_Complete.Controllers
                         var Artist = (from data in db.Artist where data.ID == ArtID select data).SingleOrDefault();
 
                         //Use LastFM api to go get the songs in this album
-                        var rawData = client.DownloadString(String.Format(baseUrl + "?method=album.getinfo&api_key={0}&artist={1}&album={2}&format=json", apiKey, Artist.firstName, Albums[i].name));
+                        var rawData = client.DownloadString(String.Concat(baseUrl, String.Format("?method=album.getinfo&api_key={0}&artist={1}&album={2}&format=json", apiKey, HttpUtility.UrlEncode(Artist.firstName), Albums[i].name)));
                         var AlbumSearch = JsonConvert.DeserializeObject<AlbumGetInfo>(rawData);
 
 
@@ -409,7 +410,7 @@ namespace Angular_Demo_Complete.Controllers
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
                 }

@@ -41,7 +41,7 @@
         $scope.SearchArtist = function (artist) {
             return $http({
                 method: "POST",
-                url: SessionState.Endpoint + "/api/Artist/Search?Artist=" + artist
+                url: SessionState.Endpoint + "/api/Artist/Search?Artist=" + encodeURI(artist)
             }).then(function (success) {
                 //$scope.CurrentArtist = success.data;
                 $scope.State.ArtistData.Search = success.data;
@@ -54,7 +54,7 @@
             $scope.State.ArtistData.MusicAddLoading = true;
             return $http({
                 method: "POST",
-                url: SessionState.Endpoint + "/api/Artist/Add?Artist=" + Artist                
+                url: SessionState.Endpoint + "/api/Artist/Add?Artist=" + encodeURI(Artist)               
             }).then(function (success) {
                 //console.log(success.data);
                 $scope.State.ArtistData.MusicAdd = "";
