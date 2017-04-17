@@ -27,7 +27,9 @@ namespace Angular_Demo_Complete.Models
 
         public double calculatePrice()
         {
-            
+
+            if (this.Songs != null)
+            {
                 var total = 0.0;
 
 
@@ -41,7 +43,9 @@ namespace Angular_Demo_Complete.Models
                     total = (total * .6);
                 }
 
-                return Math.Round(total, 2);
+                return Math.Round(total, 2); 
+            }
+            return 0.0;
             
         }
 

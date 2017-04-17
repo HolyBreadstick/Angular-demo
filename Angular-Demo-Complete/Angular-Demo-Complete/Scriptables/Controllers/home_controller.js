@@ -18,7 +18,7 @@
                 url: SessionState.Endpoint + "api/Artist/All"
             }).then(function (success) {
                 $scope.Searchables = success.data;
-                if ($scope.Searchables.length != 0) {
+                if ($scope.Searchables.length != 0 && SessionState.ArtistData.All.length == 0) {
                     $scope.AlbumSearch();
                 }
                 });

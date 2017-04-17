@@ -192,19 +192,12 @@ namespace Angular_Demo_Complete.Controllers
                  ID = data.ID,
                  AddedAt = data.AddedAt,
                  firstName = data.firstName,
-                 Albums = (from dt in data.Albums orderby dt.title select new FastAlbumSearch() {
+                 Albums = (from dt in data.Albums orderby dt.views orderby dt.views descending select new FastAlbumSearch() {
                      ArtistName = dt.Owner.firstName,
                      ID = dt.ID,
                      imageLink = dt.imageLink,
                      title = dt.title,
-                     views = dt.views,
-                     Songs = (from ds in dt.Songs orderby ds.title select new FastSongSearch() {
-                         discount = ds.discount,
-                         ID = ds.ID,
-                         onSale = ds.onSale,
-                         storedPrice = ds.storedPrice,
-                         title = ds.title
-                     }).ToList()
+                     views = dt.views
                  }).ToList()
              }).SingleOrDefault(); 
 
@@ -270,7 +263,7 @@ namespace Angular_Demo_Complete.Controllers
                 }
             }
 
-            if (data != null && data.Songs != null) {
+            if (data != null && data.Songs != null && data.Songs.Count != 0) {
                 for (int i = 0; i < data.Songs.Count; i++)
                 {
                     var temp = data.Songs[i];
